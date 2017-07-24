@@ -60,9 +60,8 @@
 					scale(target);
 				}, 100);
 			};
-			var add = window.addEventListener;
-			add('resize', rescale);
-			add('orientationchange', rescale);
+			window.addEventListener('resize', rescale);
+			window.addEventListener('orientationchange', rescale);
 		}
 
 		// if no MutationObserver available we cannot listen to dom mutations
