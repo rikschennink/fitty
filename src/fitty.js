@@ -49,8 +49,7 @@ export default function fitty(target, options = {}) {
 
 		// We can rescale when content changes! \o/
 		observer = new MutationObserver((mutations) => {
-			mutations.forEach((mutation) => {
-				console.log('mutation', mutation.type);
+			mutations.forEach(() => {
 				scale(target);
 			});
 		});

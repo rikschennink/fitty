@@ -88,8 +88,7 @@
 
 			// We can rescale when content changes! \o/
 			observer = new MutationObserver(function (mutations) {
-				mutations.forEach(function (mutation) {
-					console.log('mutation', mutation.type);
+				mutations.forEach(function () {
 					scale(target);
 				});
 			});
