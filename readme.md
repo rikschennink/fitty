@@ -25,6 +25,7 @@ Include the script on your page.
 Fitty rescales the target element so it purposely overflows the parent container, it then tests the size against the available space and scales it back according to the space to overflow ratio.
 
 
+
 ## Options
 
 You can pass two option properties.
