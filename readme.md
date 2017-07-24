@@ -1,3 +1,5 @@
+![](https://raw.githubusercontent.com/rikschennink/fitty/gh-pages/fitty.svg)
+
 # Fitty, JavaScript text resizing
 
 Makes text fit perfectly to its container. Ideal for flexible and responsive websites.
