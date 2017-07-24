@@ -44,11 +44,16 @@
 
         .content div > * {
             display:block;
-            margin:0;
         }
 
         p {
             line-height:1.5;
+            margin:0;
+        }
+
+        .edit {
+            color:#2196f3;
+            margin-bottom:1em;
         }
 
     </style>
@@ -63,12 +68,18 @@
 
             <div class="fit">
 
-                <p>Fitty resizes text so it totally fills the parent container width.</p>
-                <p>If you have lots of text it will make text tiny.</p>
-                <p>But if you have a tiny bit of text</p>
-                <p>That text is able to</p>
-                <p>grow quite</p>
-                <p>BIG</p>
+                <p class="edit">The lines below are editable, change the text to see Fitty in action.</p>
+
+                <p contenteditable>Fitty resizes text so it totally fills the parent container width.</p>
+                <p contenteditable>If you have lots of text it will make text tiny.</p>
+                <p contenteditable>But if you have a tiny bit of text</p>
+                <p contenteditable>That text is able to</p>
+                <p contenteditable>grow quite</p>
+                <p contenteditable>BIG</p>
+
+            </div>
+
+            <div class="fit">
 
                 <p>Fitty is only 764 Bytes (gzipped)</p>
 
