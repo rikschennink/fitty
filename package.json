@@ -4,6 +4,7 @@
   "description": "Fits text in parent container",
   "main": "fitty.es6.js",
   "author": "",
+  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.18.0",

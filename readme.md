@@ -8,14 +8,11 @@ Download the `fitty.min.js` file from the /dist folder.
  
 Include the script on your page.
 ```html
-<div id="my-element">
-Hello World
-</div>
+<div id="my-element">Hello World</div>
 
 <script src="fitty.min.js"></script>
 <script>
-// Make element contents fit parent container
-fitty('#my-element');
+  fitty('#my-element');
 </script>
 ```
 
@@ -33,8 +30,8 @@ You can pass two option properties.
 ```javascript
 // default values
 fitty('#my-element', {
-	overflowSize: 250,
-	rescaleDelay: 100
+  overflowSize: 250,
+  rescaleDelay: 100
 });
 ```
 
@@ -42,3 +39,7 @@ fitty('#my-element', {
 
 - Will not work if the element is not part of the DOM or is set to `display:none`.
 - Will not work with inline elements, turn your inline elements into block level elements with `display:block`.
+
+## License
+
+MIT
