@@ -1,4 +1,4 @@
-![](fitty.svg)
+![](fitty/fitty.svg)
 
 # Fitty, JavaScript text resizing
 
