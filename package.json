@@ -2,14 +2,15 @@
   "name": "fitty",
   "version": "1.0.0",
   "description": "Fits text in parent container",
-  "main": "fitty.es6.js",
+  "main": "src/fitty.js",
   "author": "",
-  "license": "MIT",
+  "license": "ISC",
   "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
+    "babel-plugin-transform-es3-modules-literals": "0.0.3",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "gulp": "^3.9.1",
@@ -26,7 +27,6 @@
     "type": "git",
     "url": "git+https://github.com/rikschennink/fitty.git"
   },
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/rikschennink/fitty/issues"
   },

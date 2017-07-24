@@ -1,8 +1,29 @@
+const addEvent = (element, type, cb) => {
+	if (element.addEventListener) {
+		element.addEventListener(type, cb);
+	}
+	else {
+		element.attachEvent(`on${type}`, cb);
+	}
+};
+
+const removeEvent = (element, type, cb) => {
+	if (element.removeEventListener) {
+		element.removeEventListener(type, cb);
+	}
+	else {
+		element.detachEvent(`on${type}`, cb);
+	}
+};
+
 export default function fitty(target, options = {}) {
 
 	// if target is a string, treat it as a querySelector
-	if (typeof target === 'string' && 'querySelector' in document) {
-		[].slice.call(document.querySelectorAll(target)).forEach(fitty, options);
+	if (typeof target === 'string' && 'querySelectorAll' in document) {
+		const nodeList = document.querySelectorAll(target);
+		for (let i = 0; i < nodeList.length; i++) {
+			fitty(nodeList[i], options);
+		}
 		return;
 	}
 
@@ -10,7 +31,7 @@ export default function fitty(target, options = {}) {
 	options = {
 		overflowSize: 500, // 500
 		rescaleDelay: 100, // 100
-		observeWindow: 'addEventListener' in window,
+		observeWindow: true,
 		observeMutations: 'MutationObserver' in window,
 		...options
 	};
@@ -39,8 +60,8 @@ export default function fitty(target, options = {}) {
 				scale(target);
 			}, options.rescaleDelay);
 		};
-		window.addEventListener('resize', rescale);
-		window.addEventListener('orientationchange', rescale);
+		addEvent(window, 'resize', rescale);
+		addEvent(window, 'orientationchange', rescale);
 	}
 
 	// should we observe dom mutations
@@ -70,7 +91,7 @@ export default function fitty(target, options = {}) {
 		destroy: () => {
 
 			if (options.observeWindow) {
-				window.removeEventListener('resize', rescale);
+				removeEvent(window, 'resize', rescale);
 			}
 
 			if (options.observeMutations) {

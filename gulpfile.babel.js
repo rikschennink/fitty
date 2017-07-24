@@ -19,7 +19,8 @@ gulp.task('default', () =>
 			plugins: [
 				'add-module-exports',
 				'transform-object-rest-spread',
-				'transform-es2015-modules-umd'
+				['transform-es2015-modules-umd', { loose: true }],
+				'transform-es3-modules-literals'
 			],
 			presets: ['es2015']
 		}))

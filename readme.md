@@ -34,7 +34,7 @@ The font size in pixels used to trigger the overflow, in this case 500 pixels.
 The delay in milliseconds used to debounce the scale function when resizing the window.
 
 `observeWindow`
-Rescale when orientation or window size changes. Is set to false if `addEventListener` is not supported.
+Rescale when orientation or window size changes. Default is true.
 
 `observeMutations`
 Rescale when element contents is altered. Is set to false when `MutationObserve` is not supported.
@@ -44,7 +44,7 @@ Rescale when element contents is altered. Is set to false when `MutationObserve`
 fitty('#my-element', {
   overflowSize: 500,
   rescaleDelay: 100,
-  observeWindow: 'addEventListener' in window,
+  observeWindow: true,
   observeMutations: 'MutationObserver' in window
 });
 ```
@@ -53,6 +53,12 @@ fitty('#my-element', {
 
 - Will not work if the element is not part of the DOM or is set to `display:none`.
 - Will not work with inline elements, turn your inline elements into block level elements with `display:block`.
+
+
+## Tested
+
+- Modern browsers
+- IE 8+
 
 ## License
 
