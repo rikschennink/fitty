@@ -8,32 +8,82 @@
     <title>Fitty</title>
     <style>
 
-        body {
-            padding: 3em;
+        html {
+            background-color:#fff;
         }
 
-        .demo {
-            border-radius:1em;
-            color: #303238;
-            background: #b7b8bc;
+        body {
+            padding: 3em;
+            font-family: sans-serif;
+        }
+
+        h1 {
+            margin-top:0;
+            margin-bottom:0;
+        }
+
+        img {
+            display:block;
+        }
+
+        a {
+            color:#3263c6;
+        }
+
+        main {
+            max-width:30em;
+            margin-left:auto;
+            margin-right:auto;
+            font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+        }
+
+        .content {
+            padding:2em;
+            border:2px solid #363b42;
+        }
+
+        .content div > * {
+            display:block;
+            margin:0;
+        }
+
+        p {
+            line-height:1.5;
         }
 
     </style>
 </head>
 <body>
 
-    <div class="demo">
-        <div id="my-element">
-            Hello World
+    <main>
+
+        <h1><img src="fitty.svg" alt=""></h1>
+
+        <div class="content">
+
+            <div class="fit">
+
+                <p>Fitty resizes text so it totally fills the parent container width.</p>
+                <p>If you have lots of text it will make text tiny.</p>
+                <p>But if you have a tiny bit of text</p>
+                <p>That text is able to</p>
+                <p>grow quite</p>
+                <p>BIG</p>
+
+                <p>Fitty is only 764 Bytes (gzipped)</p>
+
+                <a href="https://github.com/rikschennink/fitty">Download Fitty on GitHub</a>
+
+            </div>
+
         </div>
-    </div>
+
+    </main>
 
     <script src="dist/fitty.js"></script>
     <script>
-        fitty('#my-element');
+    fitty('.fit > *');
     </script>
-
-    <a href="https://github.com/rikschennink/fitty">To GitHub Repo</a>
 
 </body>
 </html>
