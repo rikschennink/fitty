@@ -29,8 +29,8 @@ export default function fitty(target, options = {}) {
 
 	// set options object
 	options = {
-		overflowSize: 500, // 500
-		rescaleDelay: 100, // 100
+		overflowSize: 500,
+		rescaleDelay: 100,
 		observeWindow: true,
 		observeMutations: 'MutationObserver' in window,
 		...options

@@ -65,8 +65,8 @@
 
 		// set options object
 		options = _extends({
-			overflowSize: 500, // 500
-			rescaleDelay: 100, // 100
+			overflowSize: 500,
+			rescaleDelay: 100,
 			observeWindow: true,
 			observeMutations: 'MutationObserver' in window
 		}, options);
