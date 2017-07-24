@@ -7,7 +7,7 @@ Makes an elements text fit perfectly to its parent container. Ideal for flexible
 Download the `fitty.min.js` file from the /dist folder.
  
 Include the script on your page.
-```
+```html
 <div id="my-element">
 Hello World
 </div>
