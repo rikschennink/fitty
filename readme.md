@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/rikschennink/fitty/gh-pages/fitty.svg)
+![](fitty.svg)
 
 # Fitty, JavaScript text resizing
 
