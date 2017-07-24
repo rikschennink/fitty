@@ -1,4 +1,4 @@
-![](fitty/fitty.svg)
+![Fitty Logo](https://cdn.rawgit.com/rikschennink/fitty/gh-pages/fitty.svg)
 
 # Fitty, JavaScript text resizing
 
