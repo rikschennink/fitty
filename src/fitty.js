@@ -2,24 +2,29 @@ const supportsAddEventListener = 'addEventListener' in window;
 const supportsMutationObserver = 'MutationObserver' in window;
 const supportsQuerySelector = 'querySelector' in document;
 
-export default function fitty(target) {
+export default function fitty(target, options = {}) {
 
 	// if target is a string, treat it as a querySelector
 	if (typeof target === 'string' && supportsQuerySelector) {
-		[].slice.call(document.querySelectorAll(target)).forEach(fitty);
+		[].slice.call(document.querySelectorAll(target)).forEach(fitty, options);
 		return;
 	}
+
+	// set options object
+	options = {
+		overflowSize: 250,
+		rescaleDelay: 100,
+		...options
+	};
 
 	// content of target element cannot wrap
 	target.style.whiteSpace = 'nowrap';
 
-	// the maximum font size used to calculate the ideal font size
-	const OVERFLOW_SIZE = 250;
-
 	// overflow available space on purpose, then calculate fitting size
+	// used 'em' before but that caused browser differences
 	const scale = (el) => {
-		el.style.fontSize = `${OVERFLOW_SIZE}em`;
-		el.style.fontSize = `${(el.parentNode.offsetWidth / el.scrollWidth) * OVERFLOW_SIZE}em`;
+		el.style.fontSize = `${options.overflowSize}px`;
+		el.style.fontSize = `${(el.parentNode.offsetWidth / el.scrollWidth) * options.overflowSize}px`;
 	};
 
 	// initial contain
@@ -35,7 +40,7 @@ export default function fitty(target) {
 			clearTimeout(scale_timeout);
 			scale_timeout = setTimeout(() => {
 				scale(target);
-			}, 100);
+			}, options.rescaleDelay);
 		};
 		window.addEventListener('resize', rescale);
 		window.addEventListener('orientationchange', rescale);

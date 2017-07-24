@@ -18,6 +18,7 @@ gulp.task('default', () =>
 		.pipe(babel({
 			plugins: [
 				'add-module-exports',
+				'transform-object-rest-spread',
 				'transform-es2015-modules-umd'
 			],
 			presets: ['es2015']

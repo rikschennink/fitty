@@ -21,28 +21,49 @@
 		value: true
 	});
 	exports.default = fitty;
+
+	var _extends = Object.assign || function (target) {
+		for (var i = 1; i < arguments.length; i++) {
+			var source = arguments[i];
+
+			for (var key in source) {
+				if (Object.prototype.hasOwnProperty.call(source, key)) {
+					target[key] = source[key];
+				}
+			}
+		}
+
+		return target;
+	};
+
 	var supportsAddEventListener = 'addEventListener' in window;
 	var supportsMutationObserver = 'MutationObserver' in window;
 	var supportsQuerySelector = 'querySelector' in document;
 
 	function fitty(target) {
+		var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
 
 		// if target is a string, treat it as a querySelector
 		if (typeof target === 'string' && supportsQuerySelector) {
-			[].slice.call(document.querySelectorAll(target)).forEach(fitty);
+			[].slice.call(document.querySelectorAll(target)).forEach(fitty, options);
 			return;
 		}
+
+		// set options object
+		options = _extends({
+			overflowSize: 250,
+			rescaleDelay: 100
+		}, options);
 
 		// content of target element cannot wrap
 		target.style.whiteSpace = 'nowrap';
 
-		// the maximum font size used to calculate the ideal font size
-		var OVERFLOW_SIZE = 250;
-
 		// overflow available space on purpose, then calculate fitting size
+		// used 'em' before but that caused browser differences
 		var scale = function scale(el) {
-			el.style.fontSize = OVERFLOW_SIZE + 'em';
-			el.style.fontSize = el.parentNode.offsetWidth / el.scrollWidth * OVERFLOW_SIZE + 'em';
+			el.style.fontSize = options.overflowSize + 'px';
+			el.style.fontSize = el.parentNode.offsetWidth / el.scrollWidth * options.overflowSize + 'px';
 		};
 
 		// initial contain
@@ -58,7 +79,7 @@
 				clearTimeout(scale_timeout);
 				scale_timeout = setTimeout(function () {
 					scale(target);
-				}, 100);
+				}, options.rescaleDelay);
 			};
 			window.addEventListener('resize', rescale);
 			window.addEventListener('orientationchange', rescale);

@@ -23,6 +23,21 @@ fitty('#my-element');
 
 Fitty resizes element so it purposely overflows the parent container, it then tests the size against the available space and scales it back according to the space to overflow ratio.
 
+## Options
+
+You can pass two option properties.
+
+- `overflowSize`, the font size in pixels used to trigger the overflow.
+- `rescaleDelay`, the delay in milliseconds used to debounce the scale function when resizing the window.
+
+```javascript
+// default values
+fitty('#my-element', {
+	overflowSize: 250,
+	rescaleDelay: 100
+});
+```
+
 ## Note
 
 - Will not work if the element is not part of the DOM or is set to `display:none`.
