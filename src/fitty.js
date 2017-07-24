@@ -1,19 +1,17 @@
-const supportsAddEventListener = 'addEventListener' in window;
-const supportsMutationObserver = 'MutationObserver' in window;
-const supportsQuerySelector = 'querySelector' in document;
-
 export default function fitty(target, options = {}) {
 
 	// if target is a string, treat it as a querySelector
-	if (typeof target === 'string' && supportsQuerySelector) {
+	if (typeof target === 'string' && 'querySelector' in document) {
 		[].slice.call(document.querySelectorAll(target)).forEach(fitty, options);
 		return;
 	}
 
 	// set options object
 	options = {
-		overflowSize: 250,
-		rescaleDelay: 100,
+		overflowSize: 500, // 500
+		rescaleDelay: 100, // 100
+		observeWindow: 'addEventListener' in window,
+		observeMutations: 'MutationObserver' in window,
 		...options
 	};
 
@@ -21,7 +19,6 @@ export default function fitty(target, options = {}) {
 	target.style.whiteSpace = 'nowrap';
 
 	// overflow available space on purpose, then calculate fitting size
-	// used 'em' before but that caused browser differences
 	const scale = (el) => {
 		el.style.fontSize = `${options.overflowSize}px`;
 		el.style.fontSize = `${(el.parentNode.offsetWidth / el.scrollWidth) * options.overflowSize}px`;
@@ -30,15 +27,15 @@ export default function fitty(target, options = {}) {
 	// initial contain
 	scale(target);
 
-	// if no addEventListener available we cannot listen to resize event
+	// should we observe the window?
 	let rescale = null;
-	if (supportsAddEventListener) {
+	if (options.observeWindow) {
 
 		// We can rescale when window is resized! \o/
-		let scale_timeout;
+		let scaleTimeout;
 		rescale = () => {
-			clearTimeout(scale_timeout);
-			scale_timeout = setTimeout(() => {
+			clearTimeout(scaleTimeout);
+			scaleTimeout = setTimeout(() => {
 				scale(target);
 			}, options.rescaleDelay);
 		};
@@ -46,23 +43,22 @@ export default function fitty(target, options = {}) {
 		window.addEventListener('orientationchange', rescale);
 	}
 
-	// if no MutationObserver available we cannot listen to dom mutations
+	// should we observe dom mutations
 	let observer;
-	if (supportsMutationObserver) {
+	if (options.observeMutations) {
 
 		// We can rescale when content changes! \o/
 		observer = new MutationObserver((mutations) => {
-			mutations.forEach(() => {
+			mutations.forEach((mutation) => {
+				console.log('mutation', mutation.type);
 				scale(target);
 			});
 		});
 
 		observer.observe(target, {
-			attributes: true,
 			subtree: true,
 			childList: true,
-			characterData: true,
-			attributeFilter: []
+			characterData: true
 		});
 
 	}
@@ -73,12 +69,15 @@ export default function fitty(target, options = {}) {
 			scale(target)
 		},
 		destroy: () => {
-			if (supportsAddEventListener) {
+
+			if (options.observeWindow) {
 				window.removeEventListener('resize', rescale);
 			}
-			if (supportsMutationObserver) {
+
+			if (options.observeMutations) {
 				observer.disconnect();
 			}
+
 			target.style.fontSize = '';
 		}
 	}

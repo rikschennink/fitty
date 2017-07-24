@@ -5,19 +5,33 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Fitty</title>
+    <style>
+
+        body {
+            padding: 3em;
+        }
+
+        .demo {
+            border-radius:1em;
+            color: #303238;
+            background: #b7b8bc;
+        }
+
+    </style>
 </head>
 <body>
 
-<div id="my-element">
-    Hello World
-</div>
+    <div class="demo">
+        <div id="my-element">
+            Hello World
+        </div>
+    </div>
 
-<script src="dist/fitty.min.js"></script>
-<script>
-	// Make element contents fit parent container
-	fitty('#my-element');
-</script>
+    <script src="dist/fitty.min.js"></script>
+    <script>
+        fitty('#my-element');
+    </script>
 
 </body>
 </html>

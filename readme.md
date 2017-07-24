@@ -1,6 +1,7 @@
-# Fitty, Vanilla text resizing
+# Fitty, JavaScript text resizing
 
-Makes an elements text fit perfectly to its parent container. Ideal for flexible and responsive websites.
+Makes text fit perfectly to its container. Ideal for flexible and responsive websites.
+
 
 ## Use
 
@@ -16,22 +17,35 @@ Include the script on your page.
 </script>
 ```
 
+
 ## How it works
 
-Fitty resizes element so it purposely overflows the parent container, it then tests the size against the available space and scales it back according to the space to overflow ratio.
+Fitty rescales the target element so it purposely overflows the parent container, it then tests the size against the available space and scales it back according to the space to overflow ratio.
+
 
 ## Options
 
 You can pass two option properties.
 
-- `overflowSize`, the font size in pixels used to trigger the overflow.
-- `rescaleDelay`, the delay in milliseconds used to debounce the scale function when resizing the window.
+`overflowSize`
+The font size in pixels used to trigger the overflow, in this case 500 pixels.
+
+`rescaleDelay`
+The delay in milliseconds used to debounce the scale function when resizing the window.
+
+`observeWindow`
+Rescale when orientation or window size changes. Is set to false if `addEventListener` is not supported.
+
+`observeMutations`
+Rescale when element contents is altered. Is set to false when `MutationObserve` is not supported.
 
 ```javascript
 // default values
 fitty('#my-element', {
-  overflowSize: 250,
-  rescaleDelay: 100
+  overflowSize: 500,
+  rescaleDelay: 100,
+  observeWindow: 'addEventListener' in window,
+  observeMutations: 'MutationObserver' in window
 });
 ```
 

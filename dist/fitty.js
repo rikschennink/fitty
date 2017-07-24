@@ -36,31 +36,28 @@
 		return target;
 	};
 
-	var supportsAddEventListener = 'addEventListener' in window;
-	var supportsMutationObserver = 'MutationObserver' in window;
-	var supportsQuerySelector = 'querySelector' in document;
-
 	function fitty(target) {
 		var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
 
 		// if target is a string, treat it as a querySelector
-		if (typeof target === 'string' && supportsQuerySelector) {
+		if (typeof target === 'string' && 'querySelector' in document) {
 			[].slice.call(document.querySelectorAll(target)).forEach(fitty, options);
 			return;
 		}
 
 		// set options object
 		options = _extends({
-			overflowSize: 250,
-			rescaleDelay: 100
+			overflowSize: 500, // 500
+			rescaleDelay: 100, // 100
+			observeWindow: 'addEventListener' in window,
+			observeMutations: 'MutationObserver' in window
 		}, options);
 
 		// content of target element cannot wrap
 		target.style.whiteSpace = 'nowrap';
 
 		// overflow available space on purpose, then calculate fitting size
-		// used 'em' before but that caused browser differences
 		var scale = function scale(el) {
 			el.style.fontSize = options.overflowSize + 'px';
 			el.style.fontSize = el.parentNode.offsetWidth / el.scrollWidth * options.overflowSize + 'px';
@@ -69,15 +66,15 @@
 		// initial contain
 		scale(target);
 
-		// if no addEventListener available we cannot listen to resize event
+		// should we observe the window?
 		var rescale = null;
-		if (supportsAddEventListener) {
+		if (options.observeWindow) {
 
 			// We can rescale when window is resized! \o/
-			var scale_timeout = void 0;
+			var scaleTimeout = void 0;
 			rescale = function rescale() {
-				clearTimeout(scale_timeout);
-				scale_timeout = setTimeout(function () {
+				clearTimeout(scaleTimeout);
+				scaleTimeout = setTimeout(function () {
 					scale(target);
 				}, options.rescaleDelay);
 			};
@@ -85,23 +82,22 @@
 			window.addEventListener('orientationchange', rescale);
 		}
 
-		// if no MutationObserver available we cannot listen to dom mutations
+		// should we observe dom mutations
 		var observer = void 0;
-		if (supportsMutationObserver) {
+		if (options.observeMutations) {
 
 			// We can rescale when content changes! \o/
 			observer = new MutationObserver(function (mutations) {
-				mutations.forEach(function () {
+				mutations.forEach(function (mutation) {
+					console.log('mutation', mutation.type);
 					scale(target);
 				});
 			});
 
 			observer.observe(target, {
-				attributes: true,
 				subtree: true,
 				childList: true,
-				characterData: true,
-				attributeFilter: []
+				characterData: true
 			});
 		}
 
@@ -111,12 +107,15 @@
 				scale(target);
 			},
 			destroy: function destroy() {
-				if (supportsAddEventListener) {
+
+				if (options.observeWindow) {
 					window.removeEventListener('resize', rescale);
 				}
-				if (supportsMutationObserver) {
+
+				if (options.observeMutations) {
 					observer.disconnect();
 				}
+
 				target.style.fontSize = '';
 			}
 		};

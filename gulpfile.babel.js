@@ -33,3 +33,7 @@ gulp.task('default', () =>
 		}))
 		.pipe(gulp.dest('dist'))
 );
+
+gulp.task('dev', ['default'], () => {
+	gulp.watch('src/fitty.js', ['default']);
+});
