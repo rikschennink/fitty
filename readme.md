@@ -1,4 +1,4 @@
-![Fitty Logo](https://cdn.rawgit.com/rikschennink/fitty/gh-pages/fitty.svg)
+![Fitty Logo](https://cdn.rawgit.com/rikschennink/fitty/gh-pages/fitty-logo.svg)
 
 # Fitty, JavaScript text resizing
 
@@ -46,7 +46,7 @@ Wrap lines when using minimum font size. Default is `true`.
 Rescale when element contents is altered. Is set to false when `MutationObserver` is not supported. Pass `true` to use the default [MutationObserverInit](https://developer.mozilla.org/en/docs/Web/API/MutationObserver#MutationObserverInit) configuration, pass a custom MutationObserverInit config to optimize monitoring based on your project.
 
 Default configuration
-```json
+```javascript
 {
   subtree: true,
   childList: true,
@@ -101,8 +101,8 @@ For optimal performance add a CSS selector to your stylesheet that sets the elem
 Suppose all elements that you apply fitty to have the class `fit`, add this CSS selector:
 ```css
 .fit {
-    display:inline-block;
-    white-space:nowrap;
+    display: inline-block;
+    white-space: nowrap;
 }
 ```
 
@@ -115,8 +115,8 @@ And change the CSS selector to:
 
 ```css
 .js .fit {
-    display:inline-block;
-    white-space:nowrap;
+    display: inline-block;
+    white-space: nowrap;
 }
 ```
 
