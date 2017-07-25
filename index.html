@@ -11,7 +11,8 @@
     <style>
 
         html {
-            background-color:#fff;
+            background-color:#ececec;
+            line-height:1;
         }
 
         body {
@@ -22,6 +23,9 @@
         h1 {
             margin-top:0;
             margin-bottom:0;
+            background:#000;
+            color:#fff;
+            padding:.5rem;
         }
 
         img {
@@ -29,43 +33,57 @@
         }
 
         a {
-            color:#3263c6;
+            color:#0d4a66;
+            background-color:#D6E7F8;
+            line-height:2;
+            margin-top: 1em;
+            padding:0 1em;
+            box-sizing:border-box;
+            text-decoration: none;
+            border-radius: 9999em;
         }
 
         main {
-            max-width:30em;
+            max-width:35em;
             margin-left:auto;
             margin-right:auto;
-            font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
         }
 
         .content {
             padding:2em;
             border:2px solid #363b42;
+            background-color:#fff;
         }
 
         p {
-            line-height:1.5;
-            margin:0;
+            margin-top:0;
+            margin-bottom:1rem;
         }
 
         .edit {
-            color:#2196f3;
+            color:#d72c94;
             margin-bottom:1em;
         }
 
         .js .fit {
             display: inline-block;
             white-space: nowrap;
+            font-family: serif;
+        }
+
+        .fonts-loaded .fit {
+            font-family: 'Oswald', serif;
         }
 
     </style>
+
+
 </head>
 <body>
 
     <main>
 
-        <h1><img src="fitty-logo.svg" alt=""></h1>
+        <div class="header"><h1><img src="fitty-logo.svg" alt="Fitty"></h1></div>
 
         <div class="content">
 
@@ -84,7 +102,7 @@
 
             <div>
 
-                <p class="fit">Fitty is only 764 Bytes (gzipped)</p>
+                <p class="fit">Luckily Fitty is only 1.17 kB (gzipped)</p>
 
                 <a class="fit" href="https://github.com/rikschennink/fitty">Download Fitty on GitHub</a>
 
@@ -94,9 +112,65 @@
 
     </main>
 
-    <script src="dist/fitty.min.js"></script>
+    <script src="fitty.min.js"></script>
     <script>
         fitty('.fit');
+    </script>
+
+
+<script>
+(function() {
+
+  // no promise support (<=IE11)
+  if (!('Promise' in window)) {
+    return;
+  }
+
+  // called when all fonts loaded
+  function redrawFitty() {
+    document.documentElement.classList.add('fonts-loaded');
+    fitty.fitAll();
+  }
+
+  // Native solution, uses CSS Font Loader
+  function native() {
+
+    // load our custom Oswald font
+    var fontOswald = new FontFace('Oswald', 'url(assets/oswald.woff2)', {
+      style:'normal',
+      weight:'400'
+    });
+    document.fonts.add(fontOswald);
+    fontOswald.load();
+
+    // if all fonts loaded redraw fitty
+    document.fonts.ready.then(redrawFitty);
+  }
+
+  // Fallback, use FontFaceObserver for older browsers
+  function fallback() {
+
+    var style = document.createElement('style');
+    style.textContent = '@font-face { font-family: Oswald; src: url(assets/oswald.woff2) format("woff2");}'
+    document.head.appendChild(style);
+
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.0.13/fontfaceobserver.standalone.js';
+    s.onload = function() {
+      new FontFaceObserver('Oswald').load().then(redrawFitty);
+    };
+    document.body.appendChild(s);
+  }
+
+  // CSS Font Load Supported?
+  if ('fonts' in document) {
+    native();
+  }
+  else {
+    fallback();
+  }
+
+}());
     </script>
 
 </body>

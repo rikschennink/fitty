@@ -4,7 +4,6 @@ import babel from 'gulp-babel';
 import rename from 'gulp-rename';
 import uglify from 'gulp-uglify';
 import size from 'gulp-size';
-import prettier from 'gulp-prettier';
 
 const pkg = require('./package.json');
 const banner =
@@ -15,11 +14,7 @@ const banner =
 `;
 
 gulp.task('build', () => {
-	gulp.src('src/fitty.js')
-		.pipe(prettier({
-			singleQuote: true,
-		}))
-		.pipe(gulp.dest('src')) // this might be crazy, I don't know, it keeps everything in check I find.
+	gulp.src('./fitty.js')
 		.pipe(babel({
 			compact:true,
 			plugins: [
@@ -33,7 +28,7 @@ gulp.task('build', () => {
 		.pipe(size({ gzip:true }))
 		.pipe(header(banner, { pkg }))
 		.pipe(rename('fitty.min.js'))
-		.pipe(gulp.dest('dist'));
+		.pipe(gulp.dest('./'));
 });
 
 gulp.task('default', ['build'], () => {

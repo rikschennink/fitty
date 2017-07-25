@@ -4,6 +4,7 @@ let fitties = [];
 // group all redraw calls till next frame, we cancel each frame request when a new one comes in. If no support for request animation frame, this is an empty function and supports for fitty stops.
 let redrawFrame = null;
 const requestRedraw = 'requestAnimationFrame' in window ? () => {
+    console.log('request redraw');
     cancelAnimationFrame(redrawFrame);
     redrawFrame = requestAnimationFrame(() => {
       redraw(fitties.filter(f => f.dirty));
@@ -41,6 +42,8 @@ const computeFittyStyles = fitty => {
 
 // redraws fitties so they nicely fit their parent container
 const redraw = fitties => {
+  console.log('redraw');
+
   // check if styles of all fitties have been computed
   fitties
     .filter(f => !f.styleComputed)
@@ -139,6 +142,7 @@ const selectorToFitties = (selector, options) => {
 
 // fitty creation function
 function fitty(target, options = {}) {
+
   // if target is a string, treat it as a querySelector
   if (typeof target === 'string' && 'querySelectorAll' in document) {
     selectorToFitties(target, options);
@@ -189,18 +193,18 @@ function fitty(target, options = {}) {
 }
 
 // sets all fitties to dirty and calls redraw
-let redrawAllTimeout = null;
 const redrawAll = () => {
+  fitties.forEach(f => {
+    f.dirty = true;
+  });
+  requestRedraw();
+};
+
+// redraws all fitties but does so after a timeout
+let redrawAllTimeout = null;
+const redrawAllDelayed = () => {
   clearTimeout(redrawAllTimeout);
-  redrawAllTimeout = setTimeout(
-    () => {
-      fitties.forEach(f => {
-        f.dirty = true;
-      });
-      requestRedraw();
-    },
-    fitty.observeWindowDelay
-  );
+  redrawAllTimeout = setTimeout(redrawAll, fitty.observeWindowDelay);
 };
 
 // define observe window property
@@ -209,14 +213,17 @@ Object.defineProperty(fitty, 'observeWindow', {
   set: enabled => {
     const method = `${enabled ? 'add' : 'remove'}EventListener`;
     events.forEach(e => {
-      window[method](e, redrawAll);
+      window[method](e, redrawAllDelayed);
     });
   }
 });
 
-// fitty static properties
+// fitty global properties
 fitty.observeWindow = true;
 fitty.observeWindowDelay = 100;
+
+// public methods
+fitty.fitAll = redrawAll;
 
 // export our fitty function, we don't want to keep it to our selves
 export default fitty;

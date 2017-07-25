@@ -74,8 +74,7 @@ Observe the window for resize and orientationchange events. Default is `true`.
 Redraw delay for when above events are triggered. Default is `100`.
 
 
-## API
-
+## Instance API
 
 `fit()`
 Force a redraw of the current fitty element.
@@ -93,6 +92,11 @@ myFitty.fit();
 myFitty.unsubscribe();
 ```
 
+## Fitty API
+
+`fitty.fitAll()`
+Refits all fitty instances to their parent containers.
+
 
 ## Performance
 
@@ -101,8 +105,8 @@ For optimal performance add a CSS selector to your stylesheet that sets the elem
 Suppose all elements that you apply fitty to have the class `fit`, add this CSS selector:
 ```css
 .fit {
-    display: inline-block;
-    white-space: nowrap;
+  display: inline-block;
+  white-space: nowrap;
 }
 ```
 
@@ -115,15 +119,79 @@ And change the CSS selector to:
 
 ```css
 .js .fit {
-    display: inline-block;
-    white-space: nowrap;
+  display: inline-block;
+  white-space: nowrap;
 }
 ```
 
 
-## Note
+## Custom Fonts
 
-Will not work if the element is not part of the DOM. 
+Fitty does not concern itself with custom fonts. But it will be important to redraw Fitty text after a custom font has loaded (as measurements are probably incorrect at that point).
+
+If you need to use fitty on browsers that don't have [CSS Font Loading](http://caniuse.com/#feat=font-loading) support (Edge and Internet Explorer)you can use the fantastic [FontFaceObserver by Bram Stein](https://github.com/bramstein/fontfaceobserver) to detect when your fonts have loaded.
+
+See an example custom font implementation below.
+
+```javascript
+(function() {
+
+  // no promise support (<=IE11)
+  if (!('Promise' in window)) {
+    return;
+  }
+
+  // called when all fonts loaded
+  function redrawFitty() {
+    document.documentElement.classList.add('fonts-loaded');
+    fitty.fitAll();
+  }
+
+  // Native solution, uses CSS Font Loader 
+  function native() {
+
+    // load our custom Oswald font
+    var fontOswald = new FontFace('Oswald', 'url(assets/oswald.woff2)', {
+      style:'normal',
+      weight:'400'
+    });
+    document.fonts.add(fontOswald);
+    fontOswald.load();
+
+    // if all fonts loaded redraw fitty
+    document.fonts.ready.then(redrawFitty);
+  }
+
+  // Fallback, use FontFaceObserver for older browsers
+  function fallback() {
+
+    var style = document.createElement('style');
+    style.textContent = '@font-face { font-family: Oswald; src: url(assets/oswald.woff2) format("woff2");}'
+    document.head.appendChild(style);
+
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.0.13/fontfaceobserver.standalone.js';
+    s.onload = function() {
+      new FontFaceObserver('Oswald').load().then(redrawFitty);    
+    };
+    document.body.appendChild(s);
+  }
+
+  // CSS Font Load Supported?
+  if ('fonts' in document) {
+    native();
+  }
+  else {
+    fallback();
+  }
+
+}());
+```
+
+
+## Notes
+
+Will not work if the element is not part of the DOM.
 
 
 ## Tested

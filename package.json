@@ -1,6 +1,6 @@
 {
   "name": "fitty",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Fits text in parent container",
   "main": "src/fitty.js",
   "author": "",
@@ -15,7 +15,6 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-header": "^1.8.9",
-    "gulp-prettier": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-size": "^2.1.0",
     "gulp-uglify": "^1.5.4"
