@@ -6,6 +6,8 @@
 
     <title>Fitty</title>
 
+    <script>document.documentElement.classList.add('js');</script>
+
     <style>
 
         html {
@@ -42,10 +44,6 @@
             border:2px solid #363b42;
         }
 
-        .content div > * {
-            display:block;
-        }
-
         p {
             line-height:1.5;
             margin:0;
@@ -56,34 +54,39 @@
             margin-bottom:1em;
         }
 
+        .js .fit {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
     </style>
 </head>
 <body>
 
     <main>
 
-        <h1><img src="fitty.svg" alt=""></h1>
+        <h1><img src="fitty-logo.svg" alt=""></h1>
 
         <div class="content">
 
-            <div class="fit">
+            <div>
 
-                <p class="edit">The lines below are editable, change the text to see Fitty in action.</p>
+                <p class="fit edit">The lines below are editable for demo purposes.</p>
 
-                <p contenteditable>Fitty resizes text so it totally fills the parent container width.</p>
-                <p contenteditable>If you have lots of text it will make text tiny.</p>
-                <p contenteditable>But if you have a tiny bit of text</p>
-                <p contenteditable>That text is able to</p>
-                <p contenteditable>grow quite</p>
-                <p contenteditable>BIG</p>
+                <p class="fit" contenteditable>Fitty resizes text so it fills the parent container width.</p>
+                <p class="fit" contenteditable>Long lines of text will be scaled down.</p>
+                <p class="fit" contenteditable>But if you have a tiny bit of text</p>
+                <p class="fit" contenteditable>That text is able to</p>
+                <p class="fit" contenteditable>grow quite</p>
+                <p class="fit" contenteditable>BIG</p>
 
             </div>
 
-            <div class="fit">
+            <div>
 
-                <p>Fitty is only 764 Bytes (gzipped)</p>
+                <p class="fit">Fitty is only 764 Bytes (gzipped)</p>
 
-                <a href="https://github.com/rikschennink/fitty">Download Fitty on GitHub</a>
+                <a class="fit" href="https://github.com/rikschennink/fitty">Download Fitty on GitHub</a>
 
             </div>
 
@@ -91,9 +94,9 @@
 
     </main>
 
-    <script src="dist/fitty.js"></script>
+    <script src="dist/fitty.min.js"></script>
     <script>
-    fitty('.fit > *');
+        fitty('.fit');
     </script>
 
 </body>
