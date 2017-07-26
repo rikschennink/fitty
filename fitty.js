@@ -4,7 +4,6 @@ let fitties = [];
 // group all redraw calls till next frame, we cancel each frame request when a new one comes in. If no support for request animation frame, this is an empty function and supports for fitty stops.
 let redrawFrame = null;
 const requestRedraw = 'requestAnimationFrame' in window ? () => {
-    console.log('request redraw');
     cancelAnimationFrame(redrawFrame);
     redrawFrame = requestAnimationFrame(() => {
       redraw(fitties.filter(f => f.dirty));
@@ -42,7 +41,6 @@ const computeFittyStyles = fitty => {
 
 // redraws fitties so they nicely fit their parent container
 const redraw = fitties => {
-  console.log('redraw');
 
   // check if styles of all fitties have been computed
   fitties
@@ -65,8 +63,8 @@ const redraw = fitties => {
     // let's calculate the new font size
     f.currentFontSize = Math.min(
       Math.max(
-        f.minSize,
-        f.availableWidth / f.currentWidth * f.currentFontSize
+          f.minSize,
+          (f.availableWidth / f.currentWidth) * f.currentFontSize
       ),
       f.maxSize
     );
