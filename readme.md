@@ -2,50 +2,59 @@
 
 # Fitty, JavaScript text resizing
 
-Makes text fit perfectly to its container. Ideal for flexible and responsive websites.
+Scales up (or down) text so it fits perfectly to its parent container. 
+
+Ideal for flexible and responsive websites.
 
 
-## Use
+## Features
 
-Download the `fitty.min.js` file from the /dist folder.
- 
-Include the script on your page.
+- No dependencies
+- Easy setup
+- Optimal performance by grouping DOM read and write operations
+- Works with WebFonts (see example below)
+- Min and max font sizes
+- Support for MultiLine
+- Auto update when viewport changes
+- Monitors element subtree and updates accordingly
 
-Call fitty like shown below and pass an element reference or a querySelector.
+
+## Installation
+
+Install from npm:
+
+```
+npm install fitty --save
+```
+
+Or download `dist/fitty.min.js` and include the script on your page like shown below.
+
+
+## Usage
+
+Run fitty like shown below and pass an element reference or a querySelector. For best performance include the script just before the closing `</body>` element.
 
 ```html
 <div id="my-element">Hello World</div>
 
 <script src="fitty.min.js"></script>
 <script>
-  fitty('#my-element');
+fitty('#my-element');
 </script>
 ```
 
 
-## How it works
-
-Fitty calculates the size difference between the parent and child container, then it resizes the child to fit the parent.
-
-
-
-## Arguments
-
 The following options are available to pass to the `fitty` method.
 
-`minSize`
-The minimum font size in pixels. Default is `16`.
+Option             | Default       | Description              
+-------------------|---------------|------------------------------------------------
+`minSize`          | `16`          | The minimum font size in pixels
+`maxSize`          | `512`         | The maximum font size in pixels
+`multiLine`        | `true`        | Wrap lines when using minimum font size.
+`observeMutations` | `'MutationObserver' in window` | Rescale when element contents is altered. Is set to false when `MutationObserver` is not supported. Pass `true` to use the default [MutationObserverInit](https://developer.mozilla.org/en/docs/Web/API/MutationObserver#MutationObserverInit) configuration, pass a custom MutationObserverInit config to optimize monitoring based on your project. 
 
-`maxSize`
-The maximum font size in pixels. Default is `512`. What can I say, I like powers of two.
 
-`multiLine`
-Wrap lines when using minimum font size. Default is `true`.
-
-`observeMutations`
-Rescale when element contents is altered. Is set to false when `MutationObserver` is not supported. Pass `true` to use the default [MutationObserverInit](https://developer.mozilla.org/en/docs/Web/API/MutationObserver#MutationObserverInit) configuration, pass a custom MutationObserverInit config to optimize monitoring based on your project.
-
-Default configuration
+Default MutationObserverInit configuration:
 ```javascript
 {
   subtree: true,
@@ -54,64 +63,63 @@ Default configuration
 }
 ````
 
-You can pass custom arguments like this (currently shows default values)
+You can pass custom arguments like this:
+
 ```javascript
 fitty('#my-element', {
-  minSize: 16,
-  maxSize: 512,
-  multiLine: true,
-  observeMutations: 'MutationObserver' in window
+  minSize: 12,
+  maxSize: 300
 });
 ```
 
 
-## Options
-
-`fitty.observeWindow`
-Observe the window for resize and orientationchange events. Default is `true`.
-
-`fitty.observeWindowDelay`
-Redraw delay for when above events are triggered. Default is `100`.
+The `fitty` function returns a single or multiple Fitty instances depending on how it's called. If you pass a query selector it will return an array of Fitty instances, if you pass a single element reference you'll receive back a single Fitty instance. 
 
 
-## Instance API
+Method           | Description
+-----------------|---------------
+`fit()`          | Force a redraw of the current fitty element
+`unsubscribe()`  | Remove the fitty element from the redraw loop and restore it to its original state
 
-The `fitty` method returns a single or multiple Fitty instances depending on how it's called. If you pass a querySelector it will return an array of Fitty instances, if you pass a single element reference you'll receive back a single Fitty instance. 
 
-`element`
-Reference to the related element.
+Properties       | Description
+-----------------|---------------
+`element`        | Reference to the related element 
 
-`fit()`
-Force a redraw of the current fitty element.
-
-`unsubscribe()`
-Remove the fitty element from the redraw loop and restore it to its original state.
 
 ```javascript
-var myFitty = fitty('#my-element');
+var fitties = fitty('.fit');
 
-// get element reference
-var myFittyElement = myFitty.element;
+// get element reference of first fitty
+var myFittyElement = fitties[0].element;
 
 // force refit
-myFitty.fit();
+fitties[0].fit();
 
 // unsubscribe from fitty, restore to original state
-myFitty.unsubscribe();
+fitties[0].unsubscribe();
 ```
 
 
-## Fitty API
+The `fitty` function itself also exposes some static options and methods:
 
-`fitty.fitAll()`
-Refits all fitty instances to their parent containers.
+Option                     | Default       | Description              
+---------------------------|---------------|------------------------------------------------
+`fitty.observeWindow`      | `true`        | Listen to the "resize" and "orientationchange" event on the window object and update fitties accordingly.
+`fitty.observeWindowDelay` | `100`         | Redraw debounce delay in milliseconds for when above events are triggered.
+
+Method                     | Description
+---------------------------|---------------
+`fitty.fitAll()`           | Refits all fitty instances to match their parent containers. Essentially a request to redraw all fitties.
+
 
 
 ## Performance
 
-For optimal performance add a CSS selector to your stylesheet that sets the elements that will be resized to have `white-space:nowrap` and `display:inline-block`. If not, Fitty will detect this and will have to restyle the elements itself resulting in a slight performance penalty.
+For optimal performance add a CSS selector to your stylesheet that sets the elements that will be resized to have `white-space:nowrap` and `display:inline-block`. If not, Fitty will detect this and will have to restyle the elements automatically, resulting in a slight performance penalty.
 
-Suppose all elements that you apply fitty to have the class `fit`, add this CSS selector:
+Suppose all elements that you apply fitty to are assigned the `fit` class name, add the following CSS selector to your stylesheet:
+
 ```css
 .fit {
   display: inline-block;
@@ -124,6 +132,7 @@ Should you only want to do this when JavaScript is available, add the following 
 ```html
 <script>document.documentElement.classList.add('js');</script>
 ```
+
 And change the CSS selector to:
 
 ```css
@@ -136,13 +145,20 @@ And change the CSS selector to:
 
 ## Custom Fonts
 
-Fitty does not concern itself with custom fonts. But it will be important to redraw Fitty text after a custom font has loaded (as measurements are probably incorrect at that point).
+Fitty does not concern itself with custom fonts. But it will be important to redraw Fitty text after a custom font has loaded (as previous measurements are probably incorrect at that point).
 
-If you need to use fitty on browsers that don't have [CSS Font Loading](http://caniuse.com/#feat=font-loading) support (Edge and Internet Explorer)you can use the fantastic [FontFaceObserver by Bram Stein](https://github.com/bramstein/fontfaceobserver) to detect when your fonts have loaded.
+If you need to use fitty on browsers that don't have [CSS Font Loading](http://caniuse.com/#feat=font-loading) support (Edge and Internet Explorer) you can use the fantastic [FontFaceObserver by Bram Stein](https://github.com/bramstein/fontfaceobserver) to detect when your custom fonts have loaded.
 
-See an example custom font implementation below.
+See an example custom font implementation below. This assumes fitty has already been called on all elements with class name `fit`.
 
-```javascript
+```html
+<style>
+/* Only set the custom font if it's loaded and ready */
+.fonts-loaded .fit {
+  font-family: 'Oswald', serif;
+}
+</style>
+<script>
 (function() {
 
   // no promise support (<=IE11)
@@ -156,7 +172,7 @@ See an example custom font implementation below.
     fitty.fitAll();
   }
 
-  // Native solution, uses CSS Font Loader 
+  // CSS Font Loading API 
   function native() {
 
     // load our custom Oswald font
@@ -171,7 +187,7 @@ See an example custom font implementation below.
     document.fonts.ready.then(redrawFitty);
   }
 
-  // Fallback, use FontFaceObserver for older browsers
+  // FontFaceObserver
   function fallback() {
 
     var style = document.createElement('style');
@@ -186,7 +202,7 @@ See an example custom font implementation below.
     document.body.appendChild(s);
   }
 
-  // CSS Font Load Supported?
+  // Does the current browser support the CSS Font Loading API?
   if ('fonts' in document) {
     native();
   }
@@ -195,6 +211,7 @@ See an example custom font implementation below.
   }
 
 }());
+</script>
 ```
 
 

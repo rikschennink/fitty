@@ -1,10 +1,10 @@
 {
   "name": "fitty",
   "version": "2.0.1",
-  "description": "Fits text in parent container",
+  "description": "Making text fill up all the space!",
   "keywords":["fit", "responsive", "text", "font", "rescale", "resize"],
-  "main": "fitty",
-  "author": "",
+  "main": "fitty.js",
+  "author": "Rik Schennink <hello@rikschennink.nl> (http://rikschennink.nl/)",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
@@ -30,5 +30,5 @@
   "bugs": {
     "url": "https://github.com/rikschennink/fitty/issues"
   },
-  "homepage": "https://github.com/rikschennink/fitty#readme"
+  "homepage": "https://github.com/rikschennink/fitty"
 }
