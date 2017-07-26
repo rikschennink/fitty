@@ -1,6 +1,6 @@
 {
   "name": "fitty",
-  "version": "2.1.0",
+  "version": "2.0.1",
   "description": "Fits text in parent container",
   "main": "src/fitty.js",
   "author": "",
