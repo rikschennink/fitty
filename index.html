@@ -77,13 +77,12 @@
 
     </style>
 
-
 </head>
 <body>
 
     <main>
 
-        <div class="header"><h1><img src="fitty-logo.svg" alt="Fitty"></h1></div>
+        <div class="header"><h1><img src="assets/fitty-logo.svg" alt="Fitty"></h1></div>
 
         <div class="content">
 
@@ -112,65 +111,66 @@
 
     </main>
 
+    <!-- run fitty -->
     <script src="fitty.min.js"></script>
     <script>
         fitty('.fit');
     </script>
 
+    <!-- handle webfont loading and redrawing -->
+    <script>
+    (function() {
 
-<script>
-(function() {
+      // no promise support (<=IE11)
+      if (!('Promise' in window)) {
+        return;
+      }
 
-  // no promise support (<=IE11)
-  if (!('Promise' in window)) {
-    return;
-  }
+      // called when all fonts loaded
+      function redrawFitty() {
+        document.documentElement.classList.add('fonts-loaded');
+        fitty.fitAll();
+      }
 
-  // called when all fonts loaded
-  function redrawFitty() {
-    document.documentElement.classList.add('fonts-loaded');
-    fitty.fitAll();
-  }
+      // native solution, uses CSS Font Loader
+      function native() {
 
-  // Native solution, uses CSS Font Loader
-  function native() {
+        // load our custom Oswald font
+        var fontOswald = new FontFace('Oswald', 'url(assets/oswald.woff2)', {
+          style:'normal',
+          weight:'400'
+        });
+        document.fonts.add(fontOswald);
+        fontOswald.load();
 
-    // load our custom Oswald font
-    var fontOswald = new FontFace('Oswald', 'url(assets/oswald.woff2)', {
-      style:'normal',
-      weight:'400'
-    });
-    document.fonts.add(fontOswald);
-    fontOswald.load();
+        // if all fonts loaded redraw fitty
+        document.fonts.ready.then(redrawFitty);
+      }
 
-    // if all fonts loaded redraw fitty
-    document.fonts.ready.then(redrawFitty);
-  }
+      // fallback, use FontFaceObserver for older browsers
+      function fallback() {
 
-  // Fallback, use FontFaceObserver for older browsers
-  function fallback() {
+        var style = document.createElement('style');
+        style.textContent = '@font-face { font-family: Oswald; src: url(assets/oswald.woff2) format("woff2");}'
+        document.head.appendChild(style);
 
-    var style = document.createElement('style');
-    style.textContent = '@font-face { font-family: Oswald; src: url(assets/oswald.woff2) format("woff2");}'
-    document.head.appendChild(style);
+        var s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.0.13/fontfaceobserver.standalone.js';
+        s.onload = function() {
+          new FontFaceObserver('Oswald').load().then(redrawFitty);
+        };
+        document.body.appendChild(s);
+      }
 
-    var s = document.createElement('script');
-    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.0.13/fontfaceobserver.standalone.js';
-    s.onload = function() {
-      new FontFaceObserver('Oswald').load().then(redrawFitty);
-    };
-    document.body.appendChild(s);
-  }
+      // CSS Font Load supported?
+      if ('fonts' in document) {
+        native();
+      }
+      else {
+        fallback();
+      }
 
-  // CSS Font Load Supported?
-  if ('fonts' in document) {
-    native();
-  }
-  else {
-    fallback();
-  }
-
-}());
+    }());
     </script>
 
 </body>

@@ -2,9 +2,10 @@
   "name": "fitty",
   "version": "2.0.1",
   "description": "Fits text in parent container",
-  "main": "src/fitty.js",
+  "keywords":["fit", "responsive", "text", "font", "rescale", "resize"],
+  "main": "fitty",
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.18.0",

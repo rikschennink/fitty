@@ -1,4 +1,4 @@
-![Fitty Logo](https://cdn.rawgit.com/rikschennink/fitty/gh-pages/fitty-logo.svg)
+![Fitty Logo](https://cdn.rawgit.com/rikschennink/fitty/gh-pages/assets/logo.svg)
 
 # Fitty, JavaScript text resizing
 
@@ -211,7 +211,7 @@ Will not work if the element is not part of the DOM.
 
 ## Versioning
 
-Versioning follows [Semver](http://semver.org). Within 24 hours we moved to version 2.0. 
+Versioning follows [Semver](http://semver.org).
 
 ## License
 
