@@ -121,7 +121,9 @@
 <script src="fitty.min.js"></script>
 <script>
 // is delayed a bit so it's clear when fitty kicks in
-setTimeout(function(){ fitty('.fit'); }, 1500);
+setTimeout(function(){
+	console.log( fitty('.fit') );
+}, 1500);
 </script>
 
 </body>

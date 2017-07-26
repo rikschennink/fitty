@@ -32,5 +32,5 @@ gulp.task('build', () => {
 });
 
 gulp.task('default', ['build'], () => {
-	gulp.watch('src/fitty.js', ['build']);
+	gulp.watch('./fitty.js', ['build']);
 });

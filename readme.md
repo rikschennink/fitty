@@ -31,7 +31,7 @@ Fitty calculates the size difference between the parent and child container, the
 
 ## Arguments
 
-You can pass the following option properties.
+The following options are available to pass to the `fitty` method.
 
 `minSize`
 The minimum font size in pixels. Default is `16`.
@@ -76,6 +76,11 @@ Redraw delay for when above events are triggered. Default is `100`.
 
 ## Instance API
 
+The `fitty` method returns a single or multiple Fitty instances depending on how it's called. If you pass a querySelector it will return an array of Fitty instances, if you pass a single element reference you'll receive back a single Fitty instance. 
+
+`element`
+Reference to the related element.
+
 `fit()`
 Force a redraw of the current fitty element.
 
@@ -85,12 +90,16 @@ Remove the fitty element from the redraw loop and restore it to its original sta
 ```javascript
 var myFitty = fitty('#my-element');
 
+// get element reference
+var myFittyElement = myFitty.element;
+
 // force refit
 myFitty.fit();
 
-// unsubscribe from fitty
+// unsubscribe from fitty, restore to original state
 myFitty.unsubscribe();
 ```
+
 
 ## Fitty API
 

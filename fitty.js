@@ -132,23 +132,23 @@ const mutationObserverDefaultSetting = {
 // is mutation observer available on this browser?
 const mutationObserverSupported = 'MutationObserver' in window;
 
-const selectorToFitties = (selector, options) => {
-  [].slice.call(document.querySelectorAll(selector)).forEach(el => {
-    fitty(el, options);
-  });
-};
+// node list to array
+const toArray = (nl) => [].slice.call(nl);
+
+// converts a querySelector an array of fitties
+const selectorToFitties = (selector, options) => toArray( document.querySelectorAll(selector) ).map(el => fitty(el, options) );
 
 // fitty creation function
 function fitty(target, options = {}) {
 
   // if target is a string, treat it as a querySelector
   if (typeof target === 'string' && 'querySelectorAll' in document) {
-    selectorToFitties(target, options);
-    return;
+    return selectorToFitties(target, options);
   }
 
   // create fitty instance
   const f = {
+
     // defaults
     minSize: options.minSize || 16,
     maxSize: options.maxSize || 512,
@@ -156,6 +156,7 @@ function fitty(target, options = {}) {
     observeMutations: options.observeMutations === false
       ? false
       : options.observeMutations || mutationObserverSupported,
+
     // internal
     target
   };
@@ -181,6 +182,7 @@ function fitty(target, options = {}) {
 
   // expose API
   return {
+    element: target,
     fit: () => {
       fit(f);
     },
@@ -216,12 +218,15 @@ Object.defineProperty(fitty, 'observeWindow', {
   }
 });
 
+
 // fitty global properties
 fitty.observeWindow = true;
 fitty.observeWindowDelay = 100;
 
+
 // public methods
 fitty.fitAll = redrawAll;
+
 
 // export our fitty function, we don't want to keep it to our selves
 export default fitty;
