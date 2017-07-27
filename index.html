@@ -11,68 +11,194 @@
     <style>
 
         html {
-            background-color:#ececec;
-            line-height:1;
+            background-color:#fff;
+            color:#32353a;
+            font-family:Tahoma, Verdana, Segoe, sans-serif;
+            line-height:1.5;
         }
 
         body {
-            padding: 3em;
-            font-family: sans-serif;
+            margin:0;
+        }
+
+        h1, h2 {
+            font-family:'American Typewriter', 'Rockwell Extra Bold', 'Book Antiqua', Georgia, serif;
         }
 
         h1 {
-            margin-top:0;
-            margin-bottom:0;
-            background:#000;
-            color:#fff;
-            padding:.5rem;
+            font-size:4em;
         }
 
-        img {
-            display:block;
+        code {
+            background-color: #25222b;
+            color: #eeb7b7;
+            font-size: 1.125em;
+            padding: .125em .25em;
+            border-radius: .25em;
         }
 
-        a {
-            color:#0d4a66;
-            background-color:#D6E7F8;
-            line-height:2;
-            margin-top: 1em;
-            padding:0 1em;
-            box-sizing:border-box;
-            text-decoration: none;
-            border-radius: 9999em;
-        }
-
-        main {
-            max-width:35em;
-            margin-left:auto;
-            margin-right:auto;
-        }
-
-        .content {
-            padding:2em;
-            border:2px solid #363b42;
-            background-color:#fff;
-        }
-
-        p {
-            margin-top:0;
+        /**
+         * Components
+         */
+        .counter {
             margin-bottom:1rem;
+            border-bottom:.1875em dashed #d2d6dd;
         }
 
-        .edit {
-            color:#d72c94;
-            margin-bottom:1em;
+        .tagline {
+            font-size:1.125em;
+            margin:2rem 1.5rem;
         }
 
-        .js .fit {
-            display: inline-block;
-            white-space: nowrap;
-            font-family: serif;
+        .calories {
+            color:#8b919b;
+            font-size:.875em;
+        }
+
+        .button {
+            background:transparent;
+            display:inline-block;
+            padding:.5rem 1rem;
+            font-size:1em;
+            line-height: 1.5;
+            border-radius:.5rem;
+            text-decoration:none;
+            color:#8b919b;
+            border:.1875em solid currentColor;
+        }
+
+        .button-cta {
+            color: #F95E5E;
+        }
+
+        .splash {
+            position: relative;
+            height:100vh;
+            max-width:30em;
+            min-height:35em;
+            text-align:center;
+        }
+
+        .choices {
+            display:flex;
+            justify-content: center;
+        }
+
+        .splash .choices {
+            position:absolute;
+            bottom:4em;
+            left:0;
+            right:0;
+        }
+
+        .choices a {
+            margin:0 .5em;
+        }
+
+        .splash,
+        .examples > div {
+            box-sizing:border-box;
+            max-width:30em;
+            margin:0 auto;
+            padding:1.5em;
+        }
+
+        .examples > div {
+            min-height:100vh;
+        }
+
+        .examples {
+            color:#bcc2d5;
+            background-color:#32353a;
+            padding-bottom:4em;
+            text-align: center;
+        }
+
+        .examples h2 {
+            color:#5e9cf9;
+            font-weight:normal;
+            margin-bottom:2rem;
+        }
+
+        .container {
+            margin-bottom:1.5rem;
+            margin-top:1.5rem;
+        }
+
+        .fit {
+            font-weight: bold;
+            line-height:1;
+            margin:0;
+            box-shadow: 0 0 0 .375rem #24262b;
+            background-color: #24262b;
+        }
+
+        [contenteditable] {
+            outline:none;
+        }
+
+        [contenteditable]:focus {
+            background-color: #25222b;
+            color: #eeb7b7;
+        }
+
+        .fit[contenteditable]:focus {
+            box-shadow: 0 0 0 0.375rem #25222b;
+        }
+
+        .examples .button {
+            color:inherit;
+            margin-bottom:2rem;
+        }
+
+        .examples .button-cta {
+            color:#5e9cf3;
         }
 
         .fonts-loaded .fit {
-            font-family: 'Oswald', serif;
+            text-transform:uppercase;
+            font-weight:normal;
+            font-family:'Oswald', sans-serif;
+        }
+
+
+        /**
+         * Header animation
+         */
+        .counter {
+            position:relative;
+            padding-top:30vh;
+        }
+
+        .counter h1 {
+            position:relative;
+            text-align:center;
+            margin:0;
+            line-height: .625;
+            z-index:2;
+
+            transition: transform 2s;
+            transform-origin: center center;
+        }
+
+        .dish {
+            color:#e89c2b;
+            position:absolute;
+            width:1em;
+            height:1em;
+            margin-top:-.75em;
+            margin-left:-.5em;
+            font-size:2em;
+            top:0;
+            transform:translateY(-3em);
+            transition-duration:.75s;
+            transition-timing-function:ease-in;
+            transition-property:transform;
+            z-index:1;
+        }
+
+        .dish.drop {
+            transform:translateY(30vh);
         }
 
     </style>
@@ -82,28 +208,49 @@
 
     <main>
 
-        <div class="header"><h1><img src="assets/logo.svg" alt="Fitty"></h1></div>
+        <div class="splash">
 
-        <div class="content">
+            <div class="counter">
+                <div><h1>Fitty</h1></div>
+            </div>
 
-            <div>
+            <p class="tagline">Snugly resizes text to fit its parent container.</p>
 
-                <p class="fit edit">The lines below are editable for demo purposes.</p>
+            <p class="calories">~ 1 kcal eh kB gzipped</p>
 
-                <p class="fit" contenteditable>Fitty resizes text so it fills the parent container width.</p>
-                <p class="fit" contenteditable>Long lines of text will be scaled down.</p>
-                <p class="fit" contenteditable>But if you have a tiny bit of text</p>
-                <p class="fit" contenteditable>That text is able to</p>
-                <p class="fit" contenteditable>grow quite</p>
-                <p class="fit" contenteditable>BIG</p>
+            <div class="choices">
+
+                <a class="button" href="#examples">Examples</a>
+
+                <a class="button button-cta" href="https://github.com/rikschennink/fitty">Get it on GitHub</a>
 
             </div>
 
+        </div>
+
+        <div class="examples">
+
             <div>
 
-                <p class="fit">Luckily Fitty is only 1.17 kB (gzipped)</p>
+                <h2 id="examples">Examples</h2>
 
-                <a class="fit" href="https://github.com/rikschennink/fitty">Download Fitty on GitHub</a>
+                <p>All examples below can be live edited and will be auto updated.</p>
+
+                <div class="container">
+                    <p class="fit" contenteditable="true" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">The wizard quickly jinxed the gnomes before they vaporized.</p>
+                </div>
+
+                <div class="container">
+                    <p class="fit" contenteditable="true" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">Wizard</p>
+                </div>
+
+                <p>Click button below to load a custom font to the fitties above.</p>
+
+                <button class="button button-cta" type="button" onclick="loadCustomFont(this)">load custom font</button>
+
+                <div class="choices">
+                    <a class="button" href="https://github.com/rikschennink/fitty">To the Docs!</a>
+                </div>
 
             </div>
 
@@ -111,66 +258,119 @@
 
     </main>
 
-    <!-- run fitty -->
     <script src="fitty.min.js"></script>
     <script>
-        fitty('.fit');
+
+      // fit all demos
+      fitty('.fit', {
+        minSize:1
+      });
+
+
+      // let it rain
+      (function(){
+
+        var counter = document.querySelector('.counter');
+        var menu = ['🍔', '🌭', '🍕'];
+        var finished = 0;
+
+        // create food items
+        var dishes = menu
+          .concat(menu).concat(menu)
+          .sort(function() { return .5 - Math.random(); })
+          .map(function(menuItem, i) {
+
+            var dish = document.createElement('div');
+            dish.textContent = menuItem;
+            dish.className = 'dish';
+            dish.style.cssText = 'left:' + (33 + (Math.random() * 33)) + '%; transition-delay: ' + ((i * 150) + Math.random() * 50) + 'ms';
+            counter.appendChild(dish);
+            return dish;
+          });
+
+        // animate into view
+        requestAnimationFrame(function() {
+          dishes.forEach(function (dish) {
+            dish.classList.add('drop');
+            dish.addEventListener('transitionend', burb);
+          })
+        });
+
+        // burb after eating dish
+        function burb(e) {
+          e.target.style.opacity = 0;
+          finished++;
+          if (finished === dishes.length) {
+            full();
+          }
+        }
+
+        // so full!
+        function full() {
+          setTimeout(function(){
+            fitty(document.querySelector('h1'), {
+              minSize:64
+            });
+          }, 100);
+        }
+      }());
     </script>
 
-    <!-- handle webfont loading and redrawing -->
     <script>
-    (function() {
+      var loadCustomFont = (function() {
 
-      // no promise support (<=IE11)
-      if (!('Promise' in window)) {
-        return;
-      }
+        // no promise support (<=IE11)
+        if (!('Promise' in window)) {
+          return;
+        }
 
-      // called when all fonts loaded
-      function redrawFitty() {
-        document.documentElement.classList.add('fonts-loaded');
-        fitty.fitAll();
-      }
+        // called when all fonts loaded
+        function redrawFitty() {
+          document.documentElement.classList.add('fonts-loaded');
+          fitty.fitAll();
+        }
 
-      // native solution, uses CSS Font Loader
-      function native() {
+        // CSS Font Loading API
+        function native() {
 
-        // load our custom Oswald font
-        var fontOswald = new FontFace('Oswald', 'url(assets/oswald.woff2)', {
-          style:'normal',
-          weight:'400'
-        });
-        document.fonts.add(fontOswald);
-        fontOswald.load();
+          // load our custom Oswald font
+          var fontOswald = new FontFace('Oswald', 'url(assets/oswald.woff2)', {
+            style:'normal',
+            weight:'400'
+          });
+          document.fonts.add(fontOswald);
+          fontOswald.load();
 
-        // if all fonts loaded redraw fitty
-        document.fonts.ready.then(redrawFitty);
-      }
+          // if all fonts loaded redraw fitty
+          document.fonts.ready.then(redrawFitty);
+        }
 
-      // fallback, use FontFaceObserver for older browsers
-      function fallback() {
+        // FontFaceObserver
+        function fallback() {
 
-        var style = document.createElement('style');
-        style.textContent = '@font-face { font-family: Oswald; src: url(assets/oswald.woff2) format("woff2");}'
-        document.head.appendChild(style);
+          var style = document.createElement('style');
+          style.textContent = '@font-face { font-family: Oswald; src: url(assets/oswald.woff2) format("woff2");}'
+          document.head.appendChild(style);
 
-        var s = document.createElement('script');
-        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.0.13/fontfaceobserver.standalone.js';
-        s.onload = function() {
-          new FontFaceObserver('Oswald').load().then(redrawFitty);
-        };
-        document.body.appendChild(s);
-      }
+          var s = document.createElement('script');
+          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.0.13/fontfaceobserver.standalone.js';
+          s.onload = function() {
+            new FontFaceObserver('Oswald').load().then(redrawFitty);
+          };
+          document.body.appendChild(s);
+        }
 
-      // CSS Font Load supported?
-      if ('fonts' in document) {
-        native();
-      }
-      else {
-        fallback();
-      }
+        return function() {
+          // Does the current browser support the CSS Font Loading API?
+          if ('fonts' in document) {
+            native();
+          }
+          else {
+            fallback();
+          }
+        }
 
-    }());
+      }());
     </script>
 
 </body>
