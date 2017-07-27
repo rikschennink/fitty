@@ -1,6 +1,6 @@
 {
   "name": "fitty",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Snugly resizes text to fit its parent container",
   "keywords":["fit", "responsive", "text", "font", "rescale", "resize"],
   "main": "fitty.js",
