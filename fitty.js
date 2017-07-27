@@ -61,10 +61,11 @@ const redraw = fitties => {
     f.currentWidth = f.target.scrollWidth;
 
     // let's calculate the new font size
+    f.previousFontSize = f.currentFontSize;
     f.currentFontSize = Math.min(
       Math.max(
           f.minSize,
-          (f.availableWidth / f.currentWidth) * f.currentFontSize
+          (f.availableWidth / f.currentWidth) * f.previousFontSize
       ),
       f.maxSize
     );
@@ -77,11 +78,21 @@ const redraw = fitties => {
 
   // now we apply what we've learned in our previous loop
   fitties.forEach(f => {
+
     // scale to calculated font size
     style(f);
 
     // no longer dirty
     f.dirty = false;
+
+    // dispatch event
+    f.target.dispatchEvent(new CustomEvent('fit', {
+      detail:{
+        oldValue: f.previousFontSize,
+        newValue: f.currentFontSize,
+        scaleFactor: f.currentFontSize / f.previousFontSize
+      }
+    }));
   });
 };
 

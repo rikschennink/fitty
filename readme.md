@@ -101,6 +101,16 @@ fitties[0].unsubscribe();
 ```
 
 
+Fitty dispatches an event named `"fit"` when a fitty is fitted. 
+
+Event            | Description
+-----------------|---------------
+`"fit"`          | Fired when the element has been fitted to the parent container.
+
+The `detail` property of the event contains an object which exposes the font size `oldValue` the `newValue` and the `scaleFactor`.
+
+
+
 The `fitty` function itself also exposes some static options and methods:
 
 Option                     | Default       | Description              
