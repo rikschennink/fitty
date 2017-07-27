@@ -1,7 +1,7 @@
 {
   "name": "fitty",
   "version": "2.0.1",
-  "description": "Making text fill up all the space!",
+  "description": "Snugly resizes text to fit its parent container",
   "keywords":["fit", "responsive", "text", "font", "rescale", "resize"],
   "main": "fitty.js",
   "author": "Rik Schennink <hello@rikschennink.nl> (http://rikschennink.nl/)",
