@@ -1,6 +1,6 @@
 ![Fitty Logo](https://cdn.rawgit.com/rikschennink/fitty/gh-pages/assets/logo.svg)
 
-# Fitty, JavaScript text resizing
+# Fitty, Snugly text resizing
 
 Scales up (or down) text so it fits perfectly to its parent container. 
 
