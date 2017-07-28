@@ -1,0 +1,3 @@
+.gitattribute
+assets/* linguist-vendored
+*.html linguist-vendored
