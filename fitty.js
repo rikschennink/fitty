@@ -4,25 +4,35 @@ const toArray = (nl) => [].slice.call(nl);
 // window shortcut
 const w = window;
 
+// states
+const DrawState = {
+  IDLE: 0,
+  DIRTY_CONTENT: 1,
+  DIRTY_LAYOUT: 2,
+  DIRTY: 3
+};
+
 // all active fitty elements
 let fitties = [];
 
 // group all redraw calls till next frame, we cancel each frame request when a new one comes in. If no support for request animation frame, this is an empty function and supports for fitty stops.
 let redrawFrame = null;
-const requestRedraw = 'requestAnimationFrame' in window ? () => {
-    cancelAnimationFrame(redrawFrame);
-    redrawFrame = requestAnimationFrame(() => {
+const requestRedraw = 'requestAnimationFrame' in w ? () => {
+    w.cancelAnimationFrame(redrawFrame);
+    redrawFrame = w.requestAnimationFrame(() => {
       redraw(fitties.filter(f => f.dirty));
     });
   } : () => {};
 
+
 // sets all fitties to dirty so they are redrawn on the next redraw loop, then calls redraw
-const redrawAll = () => {
+const redrawAll = (type) => () => {
   fitties.forEach(f => {
-    f.dirty = true;
+    f.dirty = type;
   });
   requestRedraw();
 };
+
 
 // redraws fitties so they nicely fit their parent container
 const redraw = fitties => {
@@ -78,8 +88,10 @@ const calculateStyles = f => {
 
 };
 
-// returns true if fitty should be redrawn
-const shouldRedraw = f => f.element.parentNode.offsetWidth !== f.availableWidth;
+// should always redraw if is not dirty layout, if is dirty layout, only redraw if size has changed
+const shouldRedraw = f => {
+  return f.dirty !== DrawState.DIRTY_LAYOUT || (f.dirty === DrawState.DIRTY_LAYOUT && f.element.parentNode.offsetWidth !== f.availableWidth);
+};
 
 // every fitty element is tested for invalid styles
 const computeStyle = f => {
@@ -120,7 +132,7 @@ const shouldPreStyle = f => {
 // apply styles to array of fitties and automatically mark as non dirty
 const applyStyles = f => {
   applyStyle(f);
-  f.dirty = false;
+  f.dirty = DrawState.IDLE;
 };
 
 
@@ -143,8 +155,8 @@ const dispatchFitEvent = f => {
 
 
 // fit method, marks the fitty as dirty and requests a redraw (this will also redraw any other fitty marked as dirty)
-const fit = f => () => {
-  f.dirty = true;
+const fit = (f, type) => () => {
+  f.dirty = type;
   requestRedraw();
 };
 
@@ -186,7 +198,7 @@ const observeMutations = f => {
   }
 
   // start observing mutations
-  f.observer = new MutationObserver(fit(f));
+  f.observer = new MutationObserver(fit(f, DrawState.DIRTY_CONTENT));
 
   // start observing
   f.observer.observe(
@@ -249,7 +261,7 @@ function fittyCreate(elements, options) {
     // expose API
     return {
       element,
-      fit: fit(f),
+      fit: fit(f, DrawState.DIRTY),
       unsubscribe: unsubscribe(f)
     };
 
@@ -278,12 +290,13 @@ function fitty(target, options = {}) {
 
 
 // handles viewport changes, redraws all fitties, but only does so after a timeout
-let redrawAllTimeout = null;
+let resizeDebounce = null;
 const onWindowResized = () => {
-  clearTimeout(redrawAllTimeout);
-  redrawAllTimeout = setTimeout(() => {
-    redrawAll()
-  }, fitty.observeWindowDelay);
+  w.clearTimeout(resizeDebounce);
+  resizeDebounce = w.setTimeout(
+    redrawAll(DrawState.DIRTY_LAYOUT),
+    fitty.observeWindowDelay
+  );
 };
 
 
@@ -304,8 +317,8 @@ fitty.observeWindow = true;
 fitty.observeWindowDelay = 100;
 
 
-// public methods
-fitty.fitAll = redrawAll;
+// public fit all method, will force redraw no matter what
+fitty.fitAll = redrawAll(DrawState.DIRTY);
 
 
 // export our fitty function, we don't want to keep it to our selves
