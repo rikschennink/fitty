@@ -1,4 +1,4 @@
-![Fitty Logo](https://raw.githubusercontent.com/rikschennink/fitty/gh-pages/assets/logo.png)
+![Fitty Logo](https://raw.githubusercontent.com/rikschennink/fitty/gh-pages/assets/fitty.gif)
 
 # Fitty, Snugly text resizing
 
