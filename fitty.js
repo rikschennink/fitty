@@ -273,7 +273,7 @@ function fitty(target, options = {}) {
     fittyCreate( toArray( document.querySelectorAll(target) ), options) :
 
     // create single fitty
-    fittyCreate([target])[0];
+    fittyCreate([target], options)[0];
 }
 
 
