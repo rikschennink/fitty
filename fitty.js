@@ -201,7 +201,6 @@ function fitty(target, options = {}) {
   if (f.observeMutations) {
     // start observing mutations
     f.observer = new MutationObserver(() => {
-      console.log('mtuations');
       fit(f);
     });
 
