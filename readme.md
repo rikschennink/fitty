@@ -51,7 +51,7 @@ Option             | Default       | Description
 `minSize`          | `16`          | The minimum font size in pixels
 `maxSize`          | `512`         | The maximum font size in pixels
 `multiLine`        | `true`        | Wrap lines when using minimum font size.
-`observeMutations` | `'MutationObserver' in window` | Rescale when element contents is altered. Is set to false when `MutationObserver` is not supported. Pass `true` to use the default [MutationObserverInit](https://developer.mozilla.org/en/docs/Web/API/MutationObserver#MutationObserverInit) configuration, pass a custom MutationObserverInit config to optimize monitoring based on your project. 
+`observeMutations` | `MutationObserverInit` | Rescale when element contents is altered. Is set to false when `MutationObserver` is not supported. Pass a custom MutationObserverInit config to optimize monitoring based on your project. By default contains the MutationObserverInit configuration below or `false` based on browser support. 
 
 
 Default MutationObserverInit configuration:
