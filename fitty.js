@@ -39,6 +39,14 @@ const computeFittyStyles = fitty => {
   return preStyle;
 };
 
+// sets all fitties to dirty so they are redrawn on the next redraw loop, then calls redraw
+const redrawAll = () => {
+  fitties.forEach(f => {
+    f.dirty = true;
+  });
+  requestRedraw();
+};
+
 // redraws fitties so they nicely fit their parent container
 const redraw = fitties => {
 
@@ -53,28 +61,42 @@ const redraw = fitties => {
   fitties.filter(f => f.preStyle).forEach(style);
 
   // as we are in the next frame, this request should not trigger a reflow, let's gather as much intel as possible
-  fitties.forEach(f => {
-    // the available space in the parent container
-    f.availableWidth = f.target.parentNode.offsetWidth;
+  fitties.filter(f => {
 
-    // the space our target element uses
-    f.currentWidth = f.target.scrollWidth;
+      // get available width so we can determine if it has changed since previous run,
+      // we can later use this value to scale font size
+      const availableWidth = f.target.parentNode.offsetWidth;
 
-    // let's calculate the new font size
-    f.previousFontSize = f.currentFontSize;
-    f.currentFontSize = Math.min(
-      Math.max(
-          f.minSize,
-          (f.availableWidth / f.currentWidth) * f.previousFontSize
-      ),
-      f.maxSize
-    );
+      // if is the same, the width has not changed and we'll not redraw this fitty
+      if (availableWidth === f.availableWidth) {
+        return false;
+      }
 
-    // if allows wrapping, only wrap when using minimum font size (otherwise would break container)
-    f.whiteSpace = f.multiLine && f.currentFontSize === f.minSize
-      ? 'normal'
-      : 'nowrap';
-  });
+      // has changed, let's remember the new width and continue
+      f.availableWidth = availableWidth;
+
+      return true;
+    })
+    .forEach(f => {
+
+      // the space our target element uses
+      f.currentWidth = f.target.scrollWidth;
+
+      // let's calculate the new font size
+      f.previousFontSize = f.currentFontSize;
+      f.currentFontSize = Math.min(
+        Math.max(
+            f.minSize,
+            (f.availableWidth / f.currentWidth) * f.previousFontSize
+        ),
+        f.maxSize
+      );
+
+      // if allows wrapping, only wrap when using minimum font size (otherwise would break container)
+      f.whiteSpace = f.multiLine && f.currentFontSize === f.minSize
+        ? 'normal'
+        : 'nowrap';
+    });
 
   // now we apply what we've learned in our previous loop
   fitties.forEach(f => {
@@ -179,6 +201,7 @@ function fitty(target, options = {}) {
   if (f.observeMutations) {
     // start observing mutations
     f.observer = new MutationObserver(() => {
+      console.log('mtuations');
       fit(f);
     });
 
@@ -203,34 +226,29 @@ function fitty(target, options = {}) {
   };
 }
 
-// sets all fitties to dirty and calls redraw
-const redrawAll = () => {
-  fitties.forEach(f => {
-    f.dirty = true;
-  });
-  requestRedraw();
-};
 
-// redraws all fitties but does so after a timeout
+// handles viewport changes, redraws all fitties, but only does so after a timeout
 let redrawAllTimeout = null;
-const redrawAllDelayed = () => {
+const onWindowResized = () => {
   clearTimeout(redrawAllTimeout);
-  redrawAllTimeout = setTimeout(redrawAll, fitty.observeWindowDelay);
+  redrawAllTimeout = setTimeout(() => {
+    redrawAll()
+  }, fitty.observeWindowDelay);
 };
 
-// define observe window property
+// define observe window property, so when we set it to true or false events are automatically added and removed
 const events = [ 'resize', 'orientationchange' ];
 Object.defineProperty(fitty, 'observeWindow', {
   set: enabled => {
     const method = `${enabled ? 'add' : 'remove'}EventListener`;
     events.forEach(e => {
-      window[method](e, redrawAllDelayed);
+      window[method](e, onWindowResized);
     });
   }
 });
 
 
-// fitty global properties
+// fitty global properties (by setting observeWindow to true the events above get added)
 fitty.observeWindow = true;
 fitty.observeWindowDelay = 100;
 
