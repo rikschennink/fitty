@@ -64,7 +64,7 @@ const redraw = fitties => {
 const calculateStyles = f => {
 
   // get available width from parent node
-  f.availableWidth = f.element.parentNode.offsetWidth;
+  f.availableWidth = f.element.parentNode.clientWidth;
 
   // the space our target element uses
   f.currentWidth = f.element.scrollWidth;
@@ -90,7 +90,7 @@ const calculateStyles = f => {
 
 // should always redraw if is not dirty layout, if is dirty layout, only redraw if size has changed
 const shouldRedraw = f => {
-  return f.dirty !== DrawState.DIRTY_LAYOUT || (f.dirty === DrawState.DIRTY_LAYOUT && f.element.parentNode.offsetWidth !== f.availableWidth);
+  return f.dirty !== DrawState.DIRTY_LAYOUT || (f.dirty === DrawState.DIRTY_LAYOUT && f.element.parentNode.clientWidth !== f.availableWidth);
 };
 
 // every fitty element is tested for invalid styles
