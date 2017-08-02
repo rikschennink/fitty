@@ -46,10 +46,10 @@
         }
 
         code {
-            background-color: #25222b;
-            color: #eeb7b7;
+            background-color: #1e2025;
+            color: #5e9cf3;
             font-size: 1.125em;
-            padding: .125em .25em;
+            padding: .125em .325em;
             border-radius: .25em;
         }
 
@@ -107,6 +107,10 @@
             right:0;
         }
 
+        .examples .choices {
+            margin-top: 2em;
+        }
+
         .choices a {
             margin:0 .5em;
         }
@@ -139,32 +143,31 @@
         .container {
             margin-bottom:1.5rem;
             margin-top:1.5rem;
+            border:2px solid #1e2025;
         }
 
         .fit {
             font-weight: bold;
             line-height:1;
             margin:0;
-            box-shadow: 0 0 0 .375rem #24262b;
-            background-color: #24262b;
         }
 
         [contenteditable] {
             outline:none;
         }
 
-        [contenteditable]:focus {
-            background-color: #25222b;
-            color: #eeb7b7;
+        [contenteditable] * {
+            display:inline;
+            font-size:inherit !important;
         }
 
-        .fit[contenteditable]:focus {
-            box-shadow: 0 0 0 0.375rem #25222b;
+        [contenteditable]:focus {
+            color: #eeb7b7;
         }
 
         .examples .button {
             color:inherit;
-            margin-bottom:2rem;
+            margin-bottom:1rem;
         }
 
         .examples .button-cta {
@@ -257,7 +260,7 @@
 
                 <h2 id="examples">Examples</h2>
 
-                <p>The examples below can be live edited and will be auto updated.</p>
+                <p>The examples below can edited live and will auto update.</p>
 
                 <div class="container">
                     <p class="fit" contenteditable="true" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">The wizard quickly jinxed the gnomes before they vaporized.</p>
@@ -270,6 +273,8 @@
                 <p>Click button below to load a custom font to the fitties above.</p>
 
                 <button class="button button-cta" type="button" onclick="loadCustomFont(this)">load custom font</button>
+
+                <p><small>The fields above use <code>contenteditable</code>, this is useful for demo purposes but also a bit buggy, in production I would expect Fitty to be mostly used on headers and taglines.</small></p>
 
                 <div class="choices">
                     <a class="button" href="https://github.com/rikschennink/fitty">To the Docs!</a>
