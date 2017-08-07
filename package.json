@@ -10,7 +10,7 @@
     "rescale",
     "resize"
   ],
-  "main": "fitty.js",
+  "main": "fitty.min.js",
   "author": "Rik Schennink <hello@rikschennink.nl> (http://rikschennink.nl/)",
   "license": "MIT",
   "dependencies": {},
