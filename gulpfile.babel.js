@@ -9,12 +9,25 @@ const pkg = require('./package.json');
 const banner =
 `/*
  * ${ pkg.name } v${ pkg.version } - ${ pkg.description }
- * Copyright (c) ${ new Date().getFullYear() } ${ pkg.author.name } - ${ pkg.homepage }
+ * Copyright (c) ${ new Date().getFullYear() } ${ pkg.author }
  */
 `;
 
-gulp.task('build', () => {
-	gulp.src('./fitty.js')
+gulp.task('build-node', () => {
+  gulp.src('./src/fitty.js')
+    .pipe(babel({
+      plugins: [
+        'transform-object-rest-spread'
+      ],
+      presets: ['es2015']
+    }))
+    .pipe(header(banner, { pkg }))
+    .pipe(rename('fitty.module.js'))
+    .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('build-web', () => {
+	gulp.src('./src/fitty.js')
 		.pipe(babel({
 			compact:true,
 			plugins: [
@@ -28,9 +41,11 @@ gulp.task('build', () => {
 		.pipe(size({ gzip:true }))
 		.pipe(header(banner, { pkg }))
 		.pipe(rename('fitty.min.js'))
-		.pipe(gulp.dest('./'));
+		.pipe(gulp.dest('./dist'));
 });
 
+gulp.task('build', ['build-web', 'build-node']);
+
 gulp.task('default', ['build'], () => {
-	gulp.watch('./fitty.js', ['build']);
+	gulp.watch('./src/fitty.js', ['build']);
 });

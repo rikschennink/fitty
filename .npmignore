@@ -1,0 +1,6 @@
+.gitattributes
+.babelrc
+*.html
+assets/
+src/
+gulpfile.babel.js/
