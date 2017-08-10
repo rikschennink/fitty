@@ -1,6 +1,8 @@
-.gitattributes
-.babelrc
-*.html
 assets/
 src/
-gulpfile.babel.js/
+.idea/
+.gitattributes
+.babelrc
+gulpfile.babel.js
+npm-debug.log
+*.html

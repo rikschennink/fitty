@@ -1,6 +1,6 @@
 {
   "name": "fitty",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Snugly resizes text to fit its parent container",
   "keywords": [
     "fit",
@@ -10,7 +10,7 @@
     "rescale",
     "resize"
   ],
-  "main": "dist/fitty.js",
+  "main": "dist/fitty.module.js",
   "author": "Rik Schennink <hello@rikschennink.nl> (http://rikschennink.nl/)",
   "license": "MIT",
   "dependencies": {},
