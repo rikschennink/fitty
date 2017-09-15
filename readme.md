@@ -18,13 +18,11 @@ Ideal for flexible and responsive websites.
 - Monitors element subtree and updates accordingly
 
 
-## Learn ES6
+## Time to learn ES6?
 
 > Fitty is written in ES6.
 > 
-> *Thinking about learning modern ES6 JavaScript as well?*
-> 
-> I highly recommend [ES6 for Everyone](http://bit.ly/es6-course) by Wes Bos
+> If you want to learn how to write modern ES6 JavaScript as well, I highly recommend [ES6 for Everyone](http://bit.ly/es6-course) by Wes Bos.
 
 
 ## Installation
