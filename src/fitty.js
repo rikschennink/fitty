@@ -138,7 +138,14 @@ const applyStyles = f => {
 
 // apply styles to single fitty
 const applyStyle = f => {
-  f.element.style.cssText = `white-space:${f.whiteSpace};display:${f.display};font-size:${f.currentFontSize}px`;
+
+  // remember original style, we need this to restore the fitty style when unsubscribing
+  if (!f.originalStyle) {
+    f.originalStyle = f.element.getAttribute('style') || '';
+  }
+
+  // set the new style to the original style plus the fitty styles
+  f.element.style.cssText = `${f.originalStyle};white-space:${f.whiteSpace};display:${f.display};font-size:${f.currentFontSize}px`;
 };
 
 
@@ -187,7 +194,7 @@ const unsubscribe = f => () => {
   }
 
   // reset font size to inherited size
-  f.element.style.removeProperty('font-size');
+  f.element.style.cssText = f.originalStyle;
 };
 
 const observeMutations = f => {

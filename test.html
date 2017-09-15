@@ -33,16 +33,27 @@ var lines = [
 var html = '';
 for (i=0;i<25;i++) {
 	lines.forEach(function(line) {
-		html += '<div class="fit">' + line + '</div>';
+		html += '<div class="fit" style="color:red;">' + line + '</div>';
     });
 }
 
 document.querySelector('main').innerHTML = html;
 
+var fitties = [];
+
 // is delayed a bit so it's clear when fitty kicks in
 setTimeout(function(){
-	console.log( fitty('.fit') );
+    fitties = fitty('.fit');
+    console.log( fitties );
+    
+    setTimeout(function(){
+        fitties.forEach(f => {
+            f.unsubscribe();
+        })
+    }, 3000);
+
 }, 1500);
+
 </script>
 
 </body>

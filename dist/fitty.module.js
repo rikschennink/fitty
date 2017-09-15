@@ -1,5 +1,5 @@
 /*
- * fitty v2.2.3 - Snugly resizes text to fit its parent container
+ * fitty v2.2.4 - Snugly resizes text to fit its parent container
  * Copyright (c) 2017 Rik Schennink <hello@rikschennink.nl> (http://rikschennink.nl/)
  */
 'use strict';
@@ -140,7 +140,14 @@ var applyStyles = function applyStyles(f) {
 
 // apply styles to single fitty
 var applyStyle = function applyStyle(f) {
-  f.element.style.cssText = 'white-space:' + f.whiteSpace + ';display:' + f.display + ';font-size:' + f.currentFontSize + 'px';
+
+  // remember original style, we need this to restore the fitty style when unsubscribing
+  if (!f.originalStyle) {
+    f.originalStyle = f.element.getAttribute('style') || '';
+  }
+
+  // set the new style to the original style plus the fitty styles
+  f.element.style.cssText = f.originalStyle + ';white-space:' + f.whiteSpace + ';display:' + f.display + ';font-size:' + f.currentFontSize + 'px';
 };
 
 // dispatch a fit event on a fitty
@@ -190,7 +197,7 @@ var unsubscribe = function unsubscribe(f) {
     }
 
     // reset font size to inherited size
-    f.element.style.removeProperty('font-size');
+    f.element.style.cssText = f.originalStyle;
   };
 };
 
