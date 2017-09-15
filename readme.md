@@ -6,7 +6,6 @@ Scales up (or down) text so it fits perfectly to its parent container.
 
 Ideal for flexible and responsive websites.
 
-
 ## Features
 
 - No dependencies
@@ -17,6 +16,15 @@ Ideal for flexible and responsive websites.
 - Support for MultiLine
 - Auto update when viewport changes
 - Monitors element subtree and updates accordingly
+
+
+## Learn ES6
+
+> Fitty is written in ES6.
+> 
+> *Thinking about learning modern ES6 JavaScript as well?*
+> 
+> I highly recommend [ES6 for Everyone](http://bit.ly/es6-course) by Wes Bos
 
 
 ## Installation
