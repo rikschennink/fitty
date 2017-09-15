@@ -6,7 +6,6 @@ Scales up (or down) text so it fits perfectly to its parent container.
 
 Ideal for flexible and responsive websites.
 
-
 ## Features
 
 - No dependencies
