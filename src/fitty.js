@@ -1,340 +1,337 @@
-// node list to array helper method
-const toArray = (nl) => [].slice.call(nl);
+export default ((w) => {
 
-// window shortcut
-var w;
-if (typeof window !== 'undefined') {
-  w = window;
-} else {
-  w = {
-    addEventListener: function () {},
-    removeEventListener: function () {},
-  };
-}
-
-// states
-const DrawState = {
-  IDLE: 0,
-  DIRTY_CONTENT: 1,
-  DIRTY_LAYOUT: 2,
-  DIRTY: 3
-};
-
-// all active fitty elements
-let fitties = [];
-
-// group all redraw calls till next frame, we cancel each frame request when a new one comes in. If no support for request animation frame, this is an empty function and supports for fitty stops.
-let redrawFrame = null;
-const requestRedraw = 'requestAnimationFrame' in w ? () => {
-    w.cancelAnimationFrame(redrawFrame);
-    redrawFrame = w.requestAnimationFrame(() => {
-      redraw(fitties.filter(f => f.dirty));
-    });
-  } : () => {};
-
-
-// sets all fitties to dirty so they are redrawn on the next redraw loop, then calls redraw
-const redrawAll = (type) => () => {
-  fitties.forEach(f => {
-    f.dirty = type;
-  });
-  requestRedraw();
-};
-
-
-// redraws fitties so they nicely fit their parent container
-const redraw = fitties => {
-
-  // getting info from the DOM should not trigger a reflow, let's gather as much intel as possible before triggering a reflow
-
-  // check if styles of all fitties have been computed
-  fitties
-    .filter(f => !f.styleComputed)
-    .forEach(f => { f.styleComputed = computeStyle(f) });
-
-  // restyle elements that require pre-styling, this triggers a reflow, please try to prevent by adding CSS rules (see docs)
-  fitties
-    .filter(shouldPreStyle)
-    .forEach(applyStyle);
-
-  // we now determine which fitties should be redrawn, and if so, we calculate final styles for these fitties
-  fitties
-    .filter(shouldRedraw)
-    .forEach(calculateStyles);
-
-  // now we apply the calculated styles from our previous loop
-  fitties.forEach(applyStyles);
-
-  // now we dispatch events for all restyled fitties
-  fitties.forEach(dispatchFitEvent);
-};
-
-const calculateStyles = f => {
-
-  // get available width from parent node
-  f.availableWidth = f.element.parentNode.clientWidth;
-
-  // the space our target element uses
-  f.currentWidth = f.element.scrollWidth;
-
-  // remember current font size
-  f.previousFontSize = f.currentFontSize;
-
-  // let's calculate the new font size
-  f.currentFontSize = Math.min(
-    Math.max(
-      f.minSize,
-      (f.availableWidth / f.currentWidth) * f.previousFontSize
-    ),
-    f.maxSize
-  );
-
-  // if allows wrapping, only wrap when at minimum font size (otherwise would break container)
-  f.whiteSpace = f.multiLine && f.currentFontSize === f.minSize
-    ? 'normal'
-    : 'nowrap';
-
-};
-
-// should always redraw if is not dirty layout, if is dirty layout, only redraw if size has changed
-const shouldRedraw = f => {
-  return f.dirty !== DrawState.DIRTY_LAYOUT || (f.dirty === DrawState.DIRTY_LAYOUT && f.element.parentNode.clientWidth !== f.availableWidth);
-};
-
-// every fitty element is tested for invalid styles
-const computeStyle = f => {
-
-  // get style properties
-  const style = w.getComputedStyle(f.element, null);
-
-  // get current font size in pixels (if we already calculated it, use the calculated version)
-  f.currentFontSize = parseInt(style.getPropertyValue('font-size'), 10);
-
-  // get display type and wrap mode
-  f.display = style.getPropertyValue('display');
-  f.whiteSpace = style.getPropertyValue('white-space');
-};
-
-
-// determines if this fitty requires initial styling, can be prevented by applying correct styles through CSS
-const shouldPreStyle = f => {
-
-  let preStyle = false;
-
-  // should have an inline style, if not, apply
-  if (!/inline-/.test(f.display)) {
-    preStyle = true;
-    f.display = 'inline-block';
-  }
-
-  // to correctly calculate dimensions the element should have whiteSpace set to nowrap
-  if (f.whiteSpace !== 'nowrap') {
-    preStyle = true;
-    f.whiteSpace = 'nowrap';
-  }
-
-  return preStyle;
-};
-
-
-// apply styles to array of fitties and automatically mark as non dirty
-const applyStyles = f => {
-  applyStyle(f);
-  f.dirty = DrawState.IDLE;
-};
-
-
-// apply styles to single fitty
-const applyStyle = f => {
-
-  // remember original style, we need this to restore the fitty style when unsubscribing
-  if (!f.originalStyle) {
-    f.originalStyle = f.element.getAttribute('style') || '';
-  }
-
-  // set the new style to the original style plus the fitty styles
-  f.element.style.cssText = `${f.originalStyle};white-space:${f.whiteSpace};display:${f.display};font-size:${f.currentFontSize}px`;
-};
-
-
-// dispatch a fit event on a fitty
-const dispatchFitEvent = f => {
-  f.element.dispatchEvent(new CustomEvent('fit', {
-    detail:{
-      oldValue: f.previousFontSize,
-      newValue: f.currentFontSize,
-      scaleFactor: f.currentFontSize / f.previousFontSize
-    }
-  }));
-};
-
-
-// fit method, marks the fitty as dirty and requests a redraw (this will also redraw any other fitty marked as dirty)
-const fit = (f, type) => () => {
-  f.dirty = type;
-  requestRedraw();
-};
-
-
-// add a new fitty, does not redraw said fitty
-const subscribe = f => {
-
-  // this is a new fitty so we need to validate if it's styles are in order
-  f.newbie = true;
-
-  // because it's a new fitty it should also be dirty, we want it to redraw on the first loop
-  f.dirty = true;
-
-  // we want to be able to update this fitty
-  fitties.push(f);
-};
-
-
-// remove an existing fitty
-const unsubscribe = f => () => {
-
-  // remove from fitties array
-  fitties = fitties.filter(_ => _.element !== f.element);
-
-  // stop observing DOM
-  if (f.observeMutations) {
-    f.observer.disconnect();
-  }
-
-  // reset font size to inherited size
-  f.element.style.cssText = f.originalStyle;
-};
-
-const observeMutations = f => {
-
-  // no observing?
-  if (!f.observeMutations) {
+  // no window, early exit
+  if (!w) {
     return;
   }
 
-  // start observing mutations
-  f.observer = new MutationObserver(fit(f, DrawState.DIRTY_CONTENT));
+  // node list to array helper method
+  const toArray = (nl) => [].slice.call(nl);
 
-  // start observing
-  f.observer.observe(
-    f.element,
-    f.observeMutations
-  );
-
-};
-
-
-// default mutation observer settings
-const mutationObserverDefaultSetting = {
-  subtree: true,
-  childList: true,
-  characterData: true
-};
-
-
-// default fitty options
-const defaultOptions = {
-  minSize: 16,
-  maxSize: 512,
-  multiLine: true,
-  observeMutations: 'MutationObserver' in w ? mutationObserverDefaultSetting : false
-};
-
-
-// array of elements in, fitty instances out
-function fittyCreate(elements, options) {
-
-  // set options object
-  const fittyOptions = {
-
-    // expand default options
-    ...defaultOptions,
-
-    // override with custom options
-    ...options
+  // states
+  const DrawState = {
+    IDLE: 0,
+    DIRTY_CONTENT: 1,
+    DIRTY_LAYOUT: 2,
+    DIRTY: 3
   };
 
-  // create fitties
-  const publicFitties = elements.map(element => {
+  // all active fitty elements
+  let fitties = [];
 
-    // create fitty instance
-    const f = {
+  // group all redraw calls till next frame, we cancel each frame request when a new one comes in. If no support for request animation frame, this is an empty function and supports for fitty stops.
+  let redrawFrame = null;
+  const requestRedraw = 'requestAnimationFrame' in w ? () => {
+      w.cancelAnimationFrame(redrawFrame);
+      redrawFrame = w.requestAnimationFrame(() => {
+        redraw(fitties.filter(f => f.dirty));
+      });
+    } : () => {};
 
-      // expand defaults
-      ...fittyOptions,
 
-      // internal options for this fitty
-      element
+  // sets all fitties to dirty so they are redrawn on the next redraw loop, then calls redraw
+  const redrawAll = (type) => () => {
+    fitties.forEach(f => {
+      f.dirty = type;
+    });
+    requestRedraw();
+  };
+
+
+  // redraws fitties so they nicely fit their parent container
+  const redraw = fitties => {
+
+    // getting info from the DOM should not trigger a reflow, let's gather as much intel as possible before triggering a reflow
+
+    // check if styles of all fitties have been computed
+    fitties
+      .filter(f => !f.styleComputed)
+      .forEach(f => { f.styleComputed = computeStyle(f) });
+
+    // restyle elements that require pre-styling, this triggers a reflow, please try to prevent by adding CSS rules (see docs)
+    fitties
+      .filter(shouldPreStyle)
+      .forEach(applyStyle);
+
+    // we now determine which fitties should be redrawn, and if so, we calculate final styles for these fitties
+    fitties
+      .filter(shouldRedraw)
+      .forEach(calculateStyles);
+
+    // now we apply the calculated styles from our previous loop
+    fitties.forEach(applyStyles);
+
+    // now we dispatch events for all restyled fitties
+    fitties.forEach(dispatchFitEvent);
+  };
+
+  const calculateStyles = f => {
+
+    // get available width from parent node
+    f.availableWidth = f.element.parentNode.clientWidth;
+
+    // the space our target element uses
+    f.currentWidth = f.element.scrollWidth;
+
+    // remember current font size
+    f.previousFontSize = f.currentFontSize;
+
+    // let's calculate the new font size
+    f.currentFontSize = Math.min(
+      Math.max(
+        f.minSize,
+        (f.availableWidth / f.currentWidth) * f.previousFontSize
+      ),
+      f.maxSize
+    );
+
+    // if allows wrapping, only wrap when at minimum font size (otherwise would break container)
+    f.whiteSpace = f.multiLine && f.currentFontSize === f.minSize
+      ? 'normal'
+      : 'nowrap';
+
+  };
+
+  // should always redraw if is not dirty layout, if is dirty layout, only redraw if size has changed
+  const shouldRedraw = f => {
+    return f.dirty !== DrawState.DIRTY_LAYOUT || (f.dirty === DrawState.DIRTY_LAYOUT && f.element.parentNode.clientWidth !== f.availableWidth);
+  };
+
+  // every fitty element is tested for invalid styles
+  const computeStyle = f => {
+
+    // get style properties
+    const style = w.getComputedStyle(f.element, null);
+
+    // get current font size in pixels (if we already calculated it, use the calculated version)
+    f.currentFontSize = parseInt(style.getPropertyValue('font-size'), 10);
+
+    // get display type and wrap mode
+    f.display = style.getPropertyValue('display');
+    f.whiteSpace = style.getPropertyValue('white-space');
+  };
+
+
+  // determines if this fitty requires initial styling, can be prevented by applying correct styles through CSS
+  const shouldPreStyle = f => {
+
+    let preStyle = false;
+
+    // should have an inline style, if not, apply
+    if (!/inline-/.test(f.display)) {
+      preStyle = true;
+      f.display = 'inline-block';
+    }
+
+    // to correctly calculate dimensions the element should have whiteSpace set to nowrap
+    if (f.whiteSpace !== 'nowrap') {
+      preStyle = true;
+      f.whiteSpace = 'nowrap';
+    }
+
+    return preStyle;
+  };
+
+
+  // apply styles to array of fitties and automatically mark as non dirty
+  const applyStyles = f => {
+    applyStyle(f);
+    f.dirty = DrawState.IDLE;
+  };
+
+
+  // apply styles to single fitty
+  const applyStyle = f => {
+
+    // remember original style, we need this to restore the fitty style when unsubscribing
+    if (!f.originalStyle) {
+      f.originalStyle = f.element.getAttribute('style') || '';
+    }
+
+    // set the new style to the original style plus the fitty styles
+    f.element.style.cssText = `${f.originalStyle};white-space:${f.whiteSpace};display:${f.display};font-size:${f.currentFontSize}px`;
+  };
+
+
+  // dispatch a fit event on a fitty
+  const dispatchFitEvent = f => {
+    f.element.dispatchEvent(new CustomEvent('fit', {
+      detail:{
+        oldValue: f.previousFontSize,
+        newValue: f.currentFontSize,
+        scaleFactor: f.currentFontSize / f.previousFontSize
+      }
+    }));
+  };
+
+
+  // fit method, marks the fitty as dirty and requests a redraw (this will also redraw any other fitty marked as dirty)
+  const fit = (f, type) => () => {
+    f.dirty = type;
+    requestRedraw();
+  };
+
+
+  // add a new fitty, does not redraw said fitty
+  const subscribe = f => {
+
+    // this is a new fitty so we need to validate if it's styles are in order
+    f.newbie = true;
+
+    // because it's a new fitty it should also be dirty, we want it to redraw on the first loop
+    f.dirty = true;
+
+    // we want to be able to update this fitty
+    fitties.push(f);
+  };
+
+
+  // remove an existing fitty
+  const unsubscribe = f => () => {
+
+    // remove from fitties array
+    fitties = fitties.filter(_ => _.element !== f.element);
+
+    // stop observing DOM
+    if (f.observeMutations) {
+      f.observer.disconnect();
+    }
+
+    // reset font size to inherited size
+    f.element.style.cssText = f.originalStyle;
+  };
+
+  const observeMutations = f => {
+
+    // no observing?
+    if (!f.observeMutations) {
+      return;
+    }
+
+    // start observing mutations
+    f.observer = new MutationObserver(fit(f, DrawState.DIRTY_CONTENT));
+
+    // start observing
+    f.observer.observe(
+      f.element,
+      f.observeMutations
+    );
+
+  };
+
+
+  // default mutation observer settings
+  const mutationObserverDefaultSetting = {
+    subtree: true,
+    childList: true,
+    characterData: true
+  };
+
+
+  // default fitty options
+  const defaultOptions = {
+    minSize: 16,
+    maxSize: 512,
+    multiLine: true,
+    observeMutations: 'MutationObserver' in w ? mutationObserverDefaultSetting : false
+  };
+
+
+  // array of elements in, fitty instances out
+  function fittyCreate(elements, options) {
+
+    // set options object
+    const fittyOptions = {
+
+      // expand default options
+      ...defaultOptions,
+
+      // override with custom options
+      ...options
     };
 
-    // register this fitty
-    subscribe(f);
+    // create fitties
+    const publicFitties = elements.map(element => {
 
-    // should we observe DOM mutations
-    observeMutations(f);
+      // create fitty instance
+      const f = {
 
-    // expose API
-    return {
-      element,
-      fit: fit(f, DrawState.DIRTY),
-      unsubscribe: unsubscribe(f)
-    };
+        // expand defaults
+        ...fittyOptions,
 
+        // internal options for this fitty
+        element
+      };
+
+      // register this fitty
+      subscribe(f);
+
+      // should we observe DOM mutations
+      observeMutations(f);
+
+      // expose API
+      return {
+        element,
+        fit: fit(f, DrawState.DIRTY),
+        unsubscribe: unsubscribe(f)
+      };
+
+    });
+
+    // call redraw on newly initiated fitties
+    requestRedraw();
+
+    // expose fitties
+    return publicFitties;
+  }
+
+
+  // fitty creation function
+  function fitty(target, options = {}) {
+
+    // if target is a string
+    return typeof target === 'string' ?
+
+      // treat it as a querySelector
+      fittyCreate( toArray( document.querySelectorAll(target) ), options) :
+
+      // create single fitty
+      fittyCreate([target], options)[0];
+  }
+
+
+  // handles viewport changes, redraws all fitties, but only does so after a timeout
+  let resizeDebounce = null;
+  const onWindowResized = () => {
+    w.clearTimeout(resizeDebounce);
+    resizeDebounce = w.setTimeout(
+      redrawAll(DrawState.DIRTY_LAYOUT),
+      fitty.observeWindowDelay
+    );
+  };
+
+
+  // define observe window property, so when we set it to true or false events are automatically added and removed
+  const events = [ 'resize', 'orientationchange' ];
+  Object.defineProperty(fitty, 'observeWindow', {
+    set: enabled => {
+      const method = `${enabled ? 'add' : 'remove'}EventListener`;
+      events.forEach(e => {
+        w[method](e, onWindowResized);
+      });
+    }
   });
 
-  // call redraw on newly initiated fitties
-  requestRedraw();
 
-  // expose fitties
-  return publicFitties;
-}
+  // fitty global properties (by setting observeWindow to true the events above get added)
+  fitty.observeWindow = true;
+  fitty.observeWindowDelay = 100;
 
 
-// fitty creation function
-function fitty(target, options = {}) {
+  // public fit all method, will force redraw no matter what
+  fitty.fitAll = redrawAll(DrawState.DIRTY);
 
-  // if target is a string
-  return typeof target === 'string' ?
+  // export our fitty function, we don't want to keep it to our selves
+  return fitty;
 
-    // treat it as a querySelector
-    fittyCreate( toArray( document.querySelectorAll(target) ), options) :
-
-    // create single fitty
-    fittyCreate([target], options)[0];
-}
-
-
-// handles viewport changes, redraws all fitties, but only does so after a timeout
-let resizeDebounce = null;
-const onWindowResized = () => {
-  w.clearTimeout(resizeDebounce);
-  resizeDebounce = w.setTimeout(
-    redrawAll(DrawState.DIRTY_LAYOUT),
-    fitty.observeWindowDelay
-  );
-};
-
-
-// define observe window property, so when we set it to true or false events are automatically added and removed
-const events = [ 'resize', 'orientationchange' ];
-Object.defineProperty(fitty, 'observeWindow', {
-  set: enabled => {
-    const method = `${enabled ? 'add' : 'remove'}EventListener`;
-    events.forEach(e => {
-      w[method](e, onWindowResized);
-    });
-  }
-});
-
-
-// fitty global properties (by setting observeWindow to true the events above get added)
-fitty.observeWindow = true;
-fitty.observeWindowDelay = 100;
-
-
-// public fit all method, will force redraw no matter what
-fitty.fitAll = redrawAll(DrawState.DIRTY);
-
-
-// export our fitty function, we don't want to keep it to our selves
-export default fitty;
+})(typeof window === 'undefined' ? null : window);
