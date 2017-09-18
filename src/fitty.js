@@ -2,7 +2,15 @@
 const toArray = (nl) => [].slice.call(nl);
 
 // window shortcut
-const w = window;
+var w;
+if (typeof window !== 'undefined') {
+  w = window;
+} else {
+  w = {
+    addEventListener: function () {},
+    removeEventListener: function () {},
+  };
+}
 
 // states
 const DrawState = {
