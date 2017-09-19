@@ -2,7 +2,8 @@ export default ((w) => {
 
   // no window, early exit
   if (!w) {
-    return;
+    // return function 
+    return () => {};
   }
 
   // node list to array helper method
