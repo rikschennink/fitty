@@ -115,6 +115,14 @@ Event            | Description
 
 The `detail` property of the event contains an object which exposes the font size `oldValue` the `newValue` and the `scaleFactor`.
 
+```js
+myFittyElement.addEventListener('fit', function(e) {
+
+  // log the detail property to the console
+  console.log(e.detail);
+
+});
+```
 
 
 The `fitty` function itself also exposes some static options and methods:
@@ -127,7 +135,6 @@ Option                     | Default       | Description
 Method                     | Description
 ---------------------------|---------------
 `fitty.fitAll()`           | Refits all fitty instances to match their parent containers. Essentially a request to redraw all fitties.
-
 
 
 ## Performance
@@ -233,7 +240,24 @@ See an example custom font implementation below. This assumes fitty has already 
 
 ## Notes
 
-Will not work if the element is not part of the DOM.
+- Will not work if the fitty element is not part of the DOM.
+
+- If the parent element of the fitty element has horizontal padding the width calculation will be incorrect. You can fix this by wrapping the fitty element in another element.
+
+```html
+<!-- Problems -->
+<div style="padding-left:100px">
+  <h1 class="fit">I'm a wonderful heading</h1>
+</div>
+```
+
+```html
+<!-- No more problems -->
+<div style="padding-left:100px">
+  <div><h1 class="fit">I'm a wonderful heading</h1></div>
+</div>
+```
+
 
 
 ## Tested
