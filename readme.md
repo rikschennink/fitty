@@ -24,8 +24,6 @@ Fitty is written in ES6.
 
 If you want to learn how to write modern ES6 JavaScript as well, I highly recommend [ES6 for Everyone](http://bit.ly/es6-course) by Wes Bos. 
 
-**It's currently 50% discounted because of the upcoming Black Friday sale, so think fast! ;-)**
-
 
 ## Installation
 
