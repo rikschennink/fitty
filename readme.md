@@ -1,10 +1,14 @@
 ![Fitty Logo](https://raw.githubusercontent.com/rikschennink/fitty/gh-pages/assets/fitty.gif)
 
-# Fitty, Snugly text resizing
+# Fitty, Snugly text resizing 
 
 Scales up (or down) text so it fits perfectly to its parent container. 
 
 Ideal for flexible and responsive websites.
+
+[![npm version](https://badge.fury.io/js/fitty.svg)](https://badge.fury.io/js/fitty)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+
 
 ## Features
 
