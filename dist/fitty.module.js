@@ -1,6 +1,6 @@
 /*
  * fitty v2.2.5 - Snugly resizes text to fit its parent container
- * Copyright (c) 2017 Rik Schennink <hello@rikschennink.nl> (http://rikschennink.nl/)
+ * Copyright (c) 2018 Rik Schennink <hello@rikschennink.nl> (http://rikschennink.nl/)
  */
 'use strict';
 
@@ -127,10 +127,17 @@ exports.default = function (w) {
       f.display = 'inline-block';
     }
 
-    // to correctly calculate dimensions the element should have whiteSpace set to nowrap
-    if (f.whiteSpace !== 'nowrap') {
-      preStyle = true;
-      f.whiteSpace = 'nowrap';
+    // to correctly calculate dimensions the element should have whiteSpace set to normal if multiline and nowrap if not
+    if (f.multiLine) {
+      if (f.whiteSpace !== 'normal') {
+        preStyle = true;
+        f.whiteSpace = 'normal';
+      }
+    } else {
+      if (f.whiteSpace !== 'nowrap') {
+        preStyle = true;
+        f.whiteSpace = 'nowrap';
+      }
     }
 
     return preStyle;
