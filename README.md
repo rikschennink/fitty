@@ -6,8 +6,9 @@ Scales up (or down) text so it fits perfectly to its parent container.
 
 Ideal for flexible and responsive websites.
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rikschennink/fitty/blob/gh-pages/LICENSE)
 [![npm version](https://badge.fury.io/js/fitty.svg)](https://badge.fury.io/js/fitty)
-[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+[![Donate with PayPal](https://img.shields.io/badge/donate-PayPal.me-pink.svg)](https://www.paypal.me/rikschennink/5)
 
 
 ## Features
