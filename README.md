@@ -171,6 +171,13 @@ And change the CSS selector to:
 ```
 
 
+## Do Not Upscale Text
+
+Fitty calculates the difference in width between the text container and its parent container. If you use CSS to set the width of the text container to be equal to the parent container it won't scale the text.
+
+This could be achieved by forcing the text container to be a block level element with `display: block !important` or setting its width to 100% with `width: 100%`.
+
+
 ## Custom Fonts
 
 Fitty does not concern itself with custom fonts. But it will be important to redraw Fitty text after a custom font has loaded (as previous measurements are probably incorrect at that point).
