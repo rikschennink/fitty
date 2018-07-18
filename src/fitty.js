@@ -48,14 +48,15 @@ export default ((w) => {
       .filter(f => !f.styleComputed)
       .forEach(f => { f.styleComputed = computeStyle(f) });
 
+    const fittiesToRedraw = fitties.filter(shouldRedraw)
+
     // restyle elements that require pre-styling, this triggers a reflow, please try to prevent by adding CSS rules (see docs)
-    fitties
+    fittiesToRedraw
       .filter(shouldPreStyle)
       .forEach(applyStyle);
 
     // we now determine which fitties should be redrawn, and if so, we calculate final styles for these fitties
-    fitties
-      .filter(shouldRedraw)
+    fittiesToRedraw
       .forEach(calculateStyles);
 
     // now we apply the calculated styles from our previous loop

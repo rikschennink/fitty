@@ -1,6 +1,6 @@
 /*
  * fitty v2.2.5 - Snugly resizes text to fit its parent container
- * Copyright (c) 2017 Rik Schennink <hello@rikschennink.nl> (http://rikschennink.nl/)
+ * Copyright (c) 2018 Rik Schennink <hello@rikschennink.nl> (http://rikschennink.nl/)
  */
 'use strict';
 
@@ -66,11 +66,13 @@ exports.default = function (w) {
       f.styleComputed = computeStyle(f);
     });
 
+    var fittiesToRedraw = fitties.filter(shouldRedraw);
+
     // restyle elements that require pre-styling, this triggers a reflow, please try to prevent by adding CSS rules (see docs)
-    fitties.filter(shouldPreStyle).forEach(applyStyle);
+    fittiesToRedraw.filter(shouldPreStyle).forEach(applyStyle);
 
     // we now determine which fitties should be redrawn, and if so, we calculate final styles for these fitties
-    fitties.filter(shouldRedraw).forEach(calculateStyles);
+    fittiesToRedraw.forEach(calculateStyles);
 
     // now we apply the calculated styles from our previous loop
     fitties.forEach(applyStyles);
