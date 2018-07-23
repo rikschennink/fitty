@@ -123,10 +123,17 @@ export default ((w) => {
       f.display = 'inline-block';
     }
 
-    // to correctly calculate dimensions the element should have whiteSpace set to nowrap
-    if (f.whiteSpace !== 'nowrap') {
-      preStyle = true;
-      f.whiteSpace = 'nowrap';
+    // to correctly calculate dimensions the element should have whiteSpace set to normal if multiline and nowrap if not
+    if (f.multiLine) {
+      if (f.whiteSpace !== 'normal') {
+        preStyle = true;
+        f.whiteSpace = 'normal';
+      }
+    } else {
+      if (f.whiteSpace !== 'nowrap') {
+        preStyle = true;
+        f.whiteSpace = 'nowrap';
+      }
     }
 
     return preStyle;
