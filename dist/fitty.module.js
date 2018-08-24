@@ -1,6 +1,6 @@
 /*
  * fitty v2.2.5 - Snugly resizes text to fit its parent container
- * Copyright (c) 2017 Rik Schennink <hello@rikschennink.nl> (http://rikschennink.nl/)
+ * Copyright (c) 2018 Rik Schennink <hello@rikschennink.nl> (http://rikschennink.nl/)
  */
 'use strict';
 
@@ -57,7 +57,7 @@ exports.default = function (w) {
   // redraws fitties so they nicely fit their parent container
   var redraw = function redraw(fitties) {
 
-    // getting info from the DOM should not trigger a reflow, let's gather as much intel as possible before triggering a reflow
+    // getting info from the DOM at this point should not trigger a reflow, let's gather as much intel as possible before triggering a reflow
 
     // check if styles of all fitties have been computed
     fitties.filter(function (f) {
@@ -69,14 +69,24 @@ exports.default = function (w) {
     // restyle elements that require pre-styling, this triggers a reflow, please try to prevent by adding CSS rules (see docs)
     fitties.filter(shouldPreStyle).forEach(applyStyle);
 
-    // we now determine which fitties should be redrawn, and if so, we calculate final styles for these fitties
-    fitties.filter(shouldRedraw).forEach(calculateStyles);
+    // we now determine which fitties should be redrawn
+    var fittiesToRedraw = fitties.filter(shouldRedraw);
+
+    // we calculate final styles for these fitties
+    fittiesToRedraw.forEach(calculateStyles);
 
     // now we apply the calculated styles from our previous loop
-    fitties.forEach(applyStyles);
+    fittiesToRedraw.forEach(function (f) {
+      applyStyle(f);
+      markAsClean(f);
+    });
 
     // now we dispatch events for all restyled fitties
-    fitties.forEach(dispatchFitEvent);
+    fittiesToRedraw.forEach(dispatchFitEvent);
+  };
+
+  var markAsClean = function markAsClean(f) {
+    return f.dirty = DrawState.IDLE;
   };
 
   var calculateStyles = function calculateStyles(f) {
@@ -121,6 +131,11 @@ exports.default = function (w) {
 
     var preStyle = false;
 
+    // if we already tested for prestyling we don't have to do it again
+    if (f.preStyleTestCompleted) {
+      return false;
+    }
+
     // should have an inline style, if not, apply
     if (!/inline-/.test(f.display)) {
       preStyle = true;
@@ -133,13 +148,10 @@ exports.default = function (w) {
       f.whiteSpace = 'nowrap';
     }
 
-    return preStyle;
-  };
+    // we don't have to do this twice
+    f.preStyleTestCompleted = true;
 
-  // apply styles to array of fitties and automatically mark as non dirty
-  var applyStyles = function applyStyles(f) {
-    applyStyle(f);
-    f.dirty = DrawState.IDLE;
+    return preStyle;
   };
 
   // apply styles to single fitty
