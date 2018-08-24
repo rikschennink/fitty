@@ -8,51 +8,66 @@
     <title>Fitty Test Page</title>
 
     <style>
-        /* uncomment to test pre-style logic */
-        .fit {
+        .pre-style .fit {
             display:inline-block;
             white-space:nowrap;
+        }
+
+        .fixed {
+            border-top:2px solid silver;
+            width:20em;
+        }
+
+        p {
+            margin:0;
         }
     </style>
 
 </head>
 <body>
 
-<main></main>
+<main>
+
+    <div class="pre-style fixed">
+        <p class="fit" style="color:red;">Integer</p>
+        <p class="fit" style="color:green;">Lorem ipsum dolor sit.</p>
+        <p class="fit" style="color:blue;">consectetur adipiscing elit.</p>
+        <p class="fit" style="color:purple;">aecenas elementum purus nec felis pellentesque, eget volutpat mauris vestibulum.</p>
+    </div>
+
+    <div class="pre-style">
+        <p class="fit" style="color:red;">Integer</p>
+        <p class="fit" style="color:green;">Lorem ipsum dolor sit.</p>
+        <p class="fit" style="color:blue;">consectetur adipiscing elit.</p>
+        <p class="fit" style="color:purple;">aecenas elementum purus nec felis pellentesque, eget volutpat mauris vestibulum.</p>
+    </div>
+
+    <div class="fixed">
+        <p class="fit" style="color:red;">Integer</p>
+        <p class="fit" style="color:green;">Lorem ipsum dolor sit.</p>
+        <p class="fit" style="color:blue;">consectetur adipiscing elit.</p>
+        <p class="fit" style="color:purple;">aecenas elementum purus nec felis pellentesque, eget volutpat mauris vestibulum.</p>
+    </div>    
+
+    <div>
+        <p class="fit" style="color:red;">Integer</p>
+        <p class="fit" style="color:green;">Lorem ipsum dolor sit.</p>
+        <p class="fit" style="color:blue;">consectetur adipiscing elit.</p>
+        <p class="fit" style="color:purple;">aecenas elementum purus nec felis pellentesque, eget volutpat mauris vestibulum.</p>
+    </div>
+
+    
+</main>
 
 <script src="dist/fitty.min.js"></script>
 <script>
 
-var lines = [
-	'Integer',
-    'Lorem ipsum dolor sit amet.',
-    'consectetur adipiscing elit.',
-    'Maecenas elementum purus nec felis pellentesque, eget volutpat mauris vestibulum.'
-];
-
-var html = '';
-for (i=0;i<25;i++) {
-	lines.forEach(function(line) {
-		html += '<div class="fit" style="color:red;">' + line + '</div>';
-    });
-}
-
-document.querySelector('main').innerHTML = html;
-
 var fitties = [];
 
-// is delayed a bit so it's clear when fitty kicks in
+// is delayed a bit so it's clear in performance timeline when fitty kicks in
 setTimeout(function(){
     fitties = fitty('.fit');
-    console.log( fitties );
-    
-    setTimeout(function(){
-        fitties.forEach(f => {
-            f.unsubscribe();
-        })
-    }, 3000);
-
-}, 1500);
+}, 1000);
 
 </script>
 

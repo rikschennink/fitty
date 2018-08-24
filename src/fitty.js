@@ -41,7 +41,7 @@ export default ((w) => {
   // redraws fitties so they nicely fit their parent container
   const redraw = fitties => {
 
-    // getting info from the DOM should not trigger a reflow, let's gather as much intel as possible before triggering a reflow
+    // getting info from the DOM at this point should not trigger a reflow, let's gather as much intel as possible before triggering a reflow
 
     // check if styles of all fitties have been computed
     fitties
@@ -53,17 +53,23 @@ export default ((w) => {
       .filter(shouldPreStyle)
       .forEach(applyStyle);
 
-    // we now determine which fitties should be redrawn, and if so, we calculate final styles for these fitties
-    fitties
-      .filter(shouldRedraw)
-      .forEach(calculateStyles);
+    // we now determine which fitties should be redrawn
+    const fittiesToRedraw = fitties.filter(shouldRedraw);
+    
+    // we calculate final styles for these fitties
+    fittiesToRedraw.forEach(calculateStyles);
 
     // now we apply the calculated styles from our previous loop
-    fitties.forEach(applyStyles);
+    fittiesToRedraw.forEach(f => {
+      applyStyle(f);
+      markAsClean(f);
+    });
 
     // now we dispatch events for all restyled fitties
-    fitties.forEach(dispatchFitEvent);
+    fittiesToRedraw.forEach(dispatchFitEvent);
   };
+
+  const markAsClean = f => f.dirty = DrawState.IDLE;
 
   const calculateStyles = f => {
 
@@ -93,9 +99,7 @@ export default ((w) => {
   };
 
   // should always redraw if is not dirty layout, if is dirty layout, only redraw if size has changed
-  const shouldRedraw = f => {
-    return f.dirty !== DrawState.DIRTY_LAYOUT || (f.dirty === DrawState.DIRTY_LAYOUT && f.element.parentNode.clientWidth !== f.availableWidth);
-  };
+  const shouldRedraw = f => f.dirty !== DrawState.DIRTY_LAYOUT || (f.dirty === DrawState.DIRTY_LAYOUT && f.element.parentNode.clientWidth !== f.availableWidth);
 
   // every fitty element is tested for invalid styles
   const computeStyle = f => {
@@ -117,6 +121,11 @@ export default ((w) => {
 
     let preStyle = false;
 
+    // if we already tested for prestyling we don't have to do it again
+    if (f.preStyleTestCompleted) {
+      return false;
+    }
+
     // should have an inline style, if not, apply
     if (!/inline-/.test(f.display)) {
       preStyle = true;
@@ -129,14 +138,10 @@ export default ((w) => {
       f.whiteSpace = 'nowrap';
     }
 
+    // we don't have to do this twice
+    f.preStyleTestCompleted = true;
+
     return preStyle;
-  };
-
-
-  // apply styles to array of fitties and automatically mark as non dirty
-  const applyStyles = f => {
-    applyStyle(f);
-    f.dirty = DrawState.IDLE;
   };
 
 
