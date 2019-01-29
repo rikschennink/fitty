@@ -276,7 +276,7 @@ See an example custom font implementation below. This assumes fitty has already 
 - Modern browsers
 - IE 10+
 
-Note that IE10 will require CustomEvent polyfill:
+Note that IE will require CustomEvent polyfill:
 https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
 
 ## Versioning
