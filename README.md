@@ -8,7 +8,6 @@ Ideal for flexible and responsive websites.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rikschennink/fitty/blob/gh-pages/LICENSE)
 [![npm version](https://badge.fury.io/js/fitty.svg)](https://badge.fury.io/js/fitty)
-[![Support on Patreon](https://img.shields.io/badge/support-patreon-salmon.svg)](https://www.patreon.com/rikschennink)
 
 ## Features
 
