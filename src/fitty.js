@@ -16,7 +16,7 @@ export default ((w) => {
     DIRTY: 3
   };
   
-  let pause = false;
+  let prevent = false;
 
   // all active fitty elements
   let fitties = [];
@@ -173,7 +173,7 @@ export default ((w) => {
   
   // fit method, marks the fitty as dirty and requests a redraw (this will also redraw any other fitty marked as dirty)
   const fit = (f, type) => () => {
-    if (!pause){
+    if (!prevent){
       f.dirty = type;
       requestRedraw();
     }
@@ -181,12 +181,12 @@ export default ((w) => {
   
   //Pause the functionality. (So then text can be changed without changing the scale.)
   const pause = () => {
-    pause = true;
+    prevent = true;
   }
   
   //Resume the functionality and redraw it.
   const resume = (f, type) => {
-    pause = false;
+    prevent = false;
     fit(f, type);
   }
 
