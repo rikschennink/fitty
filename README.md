@@ -89,6 +89,8 @@ Method           | Description
 -----------------|---------------
 `fit()`          | Force a redraw of the current fitty element
 `unsubscribe()`  | Remove the fitty element from the redraw loop and restore it to its original state
+`pause()`        | Pause the scaling text even if the text is changing
+`resume()`       | Resume the scaling text and redraw it once.
 
 
 Properties       | Description
@@ -107,6 +109,12 @@ fitties[0].fit();
 
 // unsubscribe from fitty, restore to original state
 fitties[0].unsubscribe();
+
+// pause the scaling text
+fitties[0].pause();
+
+// resume the scaling text and refit it
+fitties[0].resume();
 ```
 
 
