@@ -180,12 +180,12 @@ export default ((w) => {
   };
   
   //Pause the functionality. (So then text can be changed without changing the scale.)
-  const pause = () => {
+  const pause = () => () => {
     prevent = true;
   }
   
   //Resume the functionality and redraw it.
-  const resume = (f, type) => {
+  const resume = (f, type) => () => {
     prevent = false;
     fit(f, type);
   }
