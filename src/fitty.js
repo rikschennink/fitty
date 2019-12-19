@@ -15,6 +15,8 @@ export default ((w) => {
     DIRTY_LAYOUT: 2,
     DIRTY: 3
   };
+  
+  let pause = false;
 
   // all active fitty elements
   let fitties = [];
@@ -168,14 +170,25 @@ export default ((w) => {
       }
     }));
   };
-
-
+  
   // fit method, marks the fitty as dirty and requests a redraw (this will also redraw any other fitty marked as dirty)
   const fit = (f, type) => () => {
-    f.dirty = type;
-    requestRedraw();
+    if (!pause){
+      f.dirty = type;
+      requestRedraw();
+    }
   };
-
+  
+  //Pause the functionality. (So then text can be changed without changing the scale.)
+  const pause = () => {
+    pause = true;
+  }
+  
+  //Resume the functionality and redraw it.
+  const resume = (f, type) => {
+    pause = false;
+    fit(f, type);
+  }
 
   // add a new fitty, does not redraw said fitty
   const subscribe = f => {
@@ -278,6 +291,8 @@ export default ((w) => {
       return {
         element,
         fit: fit(f, DrawState.DIRTY),
+        pause: pause(),
+        resume: resume(f, DrawState.DIRTY),
         unsubscribe: unsubscribe(f)
       };
 
