@@ -67,7 +67,33 @@ var fitties = [];
 // is delayed a bit so it's clear in performance timeline when fitty kicks in
 setTimeout(function(){
     fitties = fitty('.fit');
+    console.log('fitties created');
 }, 1000);
+
+// stop responding to resize after 3 seconds
+setTimeout(function(){
+    fitties.forEach(function(fitty) {
+        fitty.freeze();
+    });
+    console.log('fitties freezed');
+}, 3000);
+
+// start responding to resize after 5 seconds
+setTimeout(function(){
+    fitties.forEach(function(fitty) {
+        fitty.unfreeze();
+    })
+    console.log('fitties unfreezed');
+}, 5000);
+
+// clean up after 5 seconds
+setTimeout(function(){
+    var fitty;
+    while(fitty = fitties.pop()) {
+        fitty.unsubscribe();
+    }
+    console.log('fitties unsubscribed');
+}, 7000);
 
 </script>
 

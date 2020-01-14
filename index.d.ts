@@ -12,6 +12,8 @@ declare module 'fitty' {
 
   export interface FittyInstance {
     fit: () => void
+    freeze: () => void
+    unfreeze: () => void
     unsubscribe: () => void
   }
 }

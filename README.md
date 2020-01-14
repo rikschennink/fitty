@@ -6,6 +6,9 @@ Scales up (or down) text so it fits perfectly to its parent container.
 
 Ideal for flexible and responsive websites.
 
+**[Visit PQINA](https://pqina.nl/) for other useful JavaScript libraries and Web Components.**
+
+
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rikschennink/fitty/blob/gh-pages/LICENSE)
 [![npm version](https://badge.fury.io/js/fitty.svg)](https://badge.fury.io/js/fitty)
 [![Donate with PayPal](https://img.shields.io/badge/donate-PayPal.me-pink.svg)](https://www.paypal.me/rikschennink/5)
@@ -21,13 +24,6 @@ Ideal for flexible and responsive websites.
 - Support for MultiLine
 - Auto update when viewport changes
 - Monitors element subtree and updates accordingly
-
-
-## Time to learn ES6?
-
-Fitty is written in ES6.
-
-If you want to learn how to write modern ES6 JavaScript as well, I highly recommend [ES6 for Everyone](http://bit.ly/es6-course) by Wes Bos. 
 
 
 ## Installation
@@ -90,6 +86,8 @@ The `fitty` function returns a single or multiple Fitty instances depending on h
 Method           | Description
 -----------------|---------------
 `fit()`          | Force a redraw of the current fitty element
+`freeze()`       | No longer update this fitty on changes
+`unfreeze()`     | Resume updates to this fitty
 `unsubscribe()`  | Remove the fitty element from the redraw loop and restore it to its original state
 
 
@@ -107,8 +105,8 @@ var myFittyElement = fitties[0].element;
 // force refit
 fitties[0].fit();
 
-// unsubscribe from fitty, restore to original state
-fitties[0].unsubscribe();
+// stop updating this fitty and restore to original state
+fitties[0].destroy();
 ```
 
 
@@ -281,6 +279,7 @@ See an example custom font implementation below. This assumes fitty has already 
 ## Versioning
 
 Versioning follows [Semver](http://semver.org).
+
 
 ## License
 

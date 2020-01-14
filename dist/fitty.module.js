@@ -1,6 +1,6 @@
 /*
- * fitty v2.2.6 - Snugly resizes text to fit its parent container
- * Copyright (c) 2018 Rik Schennink <hello@rikschennink.nl> (http://rikschennink.nl/)
+ * fitty v2.3.0 - Snugly resizes text to fit its parent container
+ * Copyright (c) 2020 Rik Schennink <rik@pqina.nl> (https://pqina.nl/)
  */
 'use strict';
 
@@ -13,9 +13,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 exports.default = function (w) {
 
   // no window, early exit
-  if (!w) {
-    return;
-  }
+  if (!w) return;
 
   // node list to array helper method
   var toArray = function toArray(nl) {
@@ -38,8 +36,8 @@ exports.default = function (w) {
   var requestRedraw = 'requestAnimationFrame' in w ? function () {
     w.cancelAnimationFrame(redrawFrame);
     redrawFrame = w.requestAnimationFrame(function () {
-      redraw(fitties.filter(function (f) {
-        return f.dirty;
+      return redraw(fitties.filter(function (f) {
+        return f.dirty && f.active;
       }));
     });
   } : function () {};
@@ -48,7 +46,7 @@ exports.default = function (w) {
   var redrawAll = function redrawAll(type) {
     return function () {
       fitties.forEach(function (f) {
-        f.dirty = type;
+        return f.dirty = type;
       });
       requestRedraw();
     };
@@ -132,9 +130,7 @@ exports.default = function (w) {
     var preStyle = false;
 
     // if we already tested for prestyling we don't have to do it again
-    if (f.preStyleTestCompleted) {
-      return false;
-    }
+    if (f.preStyleTestCompleted) return false;
 
     // should have an inline style, if not, apply
     if (!/inline-/.test(f.display)) {
@@ -158,9 +154,7 @@ exports.default = function (w) {
   var applyStyle = function applyStyle(f) {
 
     // remember original style, we need this to restore the fitty style when unsubscribing
-    if (!f.originalStyle) {
-      f.originalStyle = f.element.getAttribute('style') || '';
-    }
+    if (!f.originalStyle) f.originalStyle = f.element.getAttribute('style') || '';
 
     // set the new style to the original style plus the fitty styles
     f.element.style.cssText = f.originalStyle + ';white-space:' + f.whiteSpace + ';display:' + f.display + ';font-size:' + f.currentFontSize + 'px';
@@ -181,12 +175,15 @@ exports.default = function (w) {
   var fit = function fit(f, type) {
     return function () {
       f.dirty = type;
+      if (!f.active) return;
       requestRedraw();
     };
   };
 
-  // add a new fitty, does not redraw said fitty
-  var subscribe = function subscribe(f) {
+  var init = function init(f) {
+
+    // should we observe DOM mutations
+    observeMutations(f);
 
     // this is a new fitty so we need to validate if it's styles are in order
     f.newbie = true;
@@ -198,8 +195,7 @@ exports.default = function (w) {
     fitties.push(f);
   };
 
-  // remove an existing fitty
-  var unsubscribe = function unsubscribe(f) {
+  var destroy = function destroy(f) {
     return function () {
 
       // remove from fitties array
@@ -208,21 +204,33 @@ exports.default = function (w) {
       });
 
       // stop observing DOM
-      if (f.observeMutations) {
-        f.observer.disconnect();
-      }
+      if (f.observeMutations) f.observer.disconnect();
 
       // reset font size to inherited size
       f.element.style.cssText = f.originalStyle;
     };
   };
 
+  // add a new fitty, does not redraw said fitty
+  var subscribe = function subscribe(f) {
+    return function () {
+      if (f.active) return;
+      f.active = true;
+      requestRedraw();
+    };
+  };
+
+  // remove an existing fitty
+  var unsubscribe = function unsubscribe(f) {
+    return function () {
+      return f.active = false;
+    };
+  };
+
   var observeMutations = function observeMutations(f) {
 
     // no observing?
-    if (!f.observeMutations) {
-      return;
-    }
+    if (!f.observeMutations) return;
 
     // start observing mutations
     f.observer = new MutationObserver(fit(f, DrawState.DIRTY_CONTENT));
@@ -259,20 +267,20 @@ exports.default = function (w) {
       var f = _extends({}, fittyOptions, {
 
         // internal options for this fitty
-        element: element
+        element: element,
+        active: true
       });
 
-      // register this fitty
-      subscribe(f);
-
-      // should we observe DOM mutations
-      observeMutations(f);
+      // initialise this fitty
+      init(f);
 
       // expose API
       return {
         element: element,
         fit: fit(f, DrawState.DIRTY),
-        unsubscribe: unsubscribe(f)
+        unfreeze: subscribe(f),
+        freeze: unsubscribe(f),
+        unsubscribe: destroy(f)
       };
     });
 

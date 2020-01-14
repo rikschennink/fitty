@@ -1,6 +1,6 @@
 {
   "name": "fitty",
-  "version": "2.2.6",
+  "version": "2.3.0",
   "description": "Snugly resizes text to fit its parent container",
   "keywords": [
     "fit",
@@ -11,7 +11,7 @@
     "resize"
   ],
   "main": "dist/fitty.module.js",
-  "author": "Rik Schennink <hello@rikschennink.nl> (http://rikschennink.nl/)",
+  "author": "Rik Schennink <rik@pqina.nl> (https://pqina.nl/)",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
@@ -28,7 +28,8 @@
     "gulp-uglify": "^3.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "gulp",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",
