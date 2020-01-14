@@ -11,8 +11,6 @@ Ideal for flexible and responsive websites.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rikschennink/fitty/blob/gh-pages/LICENSE)
 [![npm version](https://badge.fury.io/js/fitty.svg)](https://badge.fury.io/js/fitty)
-[![Donate with PayPal](https://img.shields.io/badge/donate-PayPal.me-pink.svg)](https://www.paypal.me/rikschennink/5)
-
 
 ## Features
 
@@ -275,6 +273,8 @@ See an example custom font implementation below. This assumes fitty has already 
 - Modern browsers
 - IE 10+
 
+Note that IE will require CustomEvent polyfill:
+https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
 
 ## Versioning
 
