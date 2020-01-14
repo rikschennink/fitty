@@ -6,7 +6,7 @@ Scales up (or down) text so it fits perfectly to its parent container.
 
 Ideal for flexible and responsive websites.
 
-**[Visit PQINA](https://pqina.nl/) for other useful JavaScript libraries and Web Components.**
+**[Visit PQINA.nl for other useful Web Components](https://pqina.nl/).**
 
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rikschennink/fitty/blob/gh-pages/LICENSE)
