@@ -92,14 +92,18 @@ exports.default = function (w) {
     // get available width from parent node
     f.availableWidth = f.element.parentNode.clientWidth;
 
+    f.availableHeight = f.element.parentNode.clientHeight;
+
     // the space our target element uses
     f.currentWidth = f.element.scrollWidth;
+
+    f.currentHeight = f.element.scrollHeight;
 
     // remember current font size
     f.previousFontSize = f.currentFontSize;
 
     // let's calculate the new font size
-    f.currentFontSize = Math.min(Math.max(f.minSize, f.availableWidth / f.currentWidth * f.previousFontSize), f.maxSize);
+    f.currentFontSize = Math.min(Math.max(f.minSize, f.fitHeight ? Math.min(f.availableWidth / f.currentWidth * f.previousFontSize, f.availableHeight / f.currentHeight * f.previousFontSize) : f.availableWidth / f.currentWidth * f.previousFontSize), f.maxSize);
 
     // if allows wrapping, only wrap when at minimum font size (otherwise would break container)
     f.whiteSpace = f.multiLine && f.currentFontSize === f.minSize ? 'normal' : 'nowrap';
@@ -250,6 +254,7 @@ exports.default = function (w) {
   var defaultOptions = {
     minSize: 16,
     maxSize: 512,
+    fitHeight: false,
     multiLine: true,
     observeMutations: 'MutationObserver' in w ? mutationObserverDefaultSetting : false
   };
