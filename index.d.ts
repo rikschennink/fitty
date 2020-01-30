@@ -2,6 +2,7 @@ declare module 'fitty' {
   interface FittyOptions {
     minSize?: number
     maxSize?: number
+    fitHeight?: boolean;
     multiLine?: boolean
     observeMutations?: MutationObserverInit
   }

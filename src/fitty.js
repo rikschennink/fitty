@@ -70,8 +70,12 @@ export default ((w) => {
     // get available width from parent node
     f.availableWidth = f.element.parentNode.clientWidth;
 
+    f.availableHeight = f.element.parentNode.clientHeight;
+
     // the space our target element uses
     f.currentWidth = f.element.scrollWidth;
+
+    f.currentHeight = f.element.scrollHeight;
 
     // remember current font size
     f.previousFontSize = f.currentFontSize;
@@ -80,7 +84,12 @@ export default ((w) => {
     f.currentFontSize = Math.min(
       Math.max(
         f.minSize,
-        (f.availableWidth / f.currentWidth) * f.previousFontSize
+        f.fitHeight
+          ? Math.min(
+              (f.availableWidth / f.currentWidth) * f.previousFontSize,
+              (f.availableHeight / f.currentHeight) * f.previousFontSize
+            )
+          : (f.availableWidth / f.currentWidth) * f.previousFontSize
       ),
       f.maxSize
     );
@@ -233,6 +242,7 @@ export default ((w) => {
   const defaultOptions = {
     minSize: 16,
     maxSize: 512,
+    fitHeight: false,
     multiLine: true,
     observeMutations: 'MutationObserver' in w ? mutationObserverDefaultSetting : false
   };
