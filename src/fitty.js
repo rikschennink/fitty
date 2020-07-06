@@ -139,12 +139,9 @@ export default ((w) => {
 
   // apply styles to single fitty
   const applyStyle = f => {
-
-    // remember original style, we need this to restore the fitty style when unsubscribing
-    if (!f.originalStyle) f.originalStyle = f.element.getAttribute('style') || '';
-
-    // set the new style to the original style plus the fitty styles
-    f.element.style.cssText = `${f.originalStyle};white-space:${f.whiteSpace};display:${f.display};font-size:${f.currentFontSize}px`;
+    f.element.style.whiteSpace = f.whiteSpace;
+    f.element.style.display = f.display;
+    f.element.style.fontSize = f.currentFontSize + 'px';
   };
 
 
