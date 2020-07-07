@@ -166,6 +166,13 @@ export default ((w) => {
 
   const init = f => {
 
+    // save some of the original CSS properties before we change them
+    f.originalStyle = {
+      whiteSpace: f.element.style.whiteSpace,
+      display: f.element.style.display,
+      fontSize: f.element.style.fontSize,
+    };
+
     // should we observe DOM mutations
     observeMutations(f);
 
@@ -187,8 +194,10 @@ export default ((w) => {
     // stop observing DOM
     if (f.observeMutations) f.observer.disconnect();
 
-    // reset font size to inherited size
-    f.element.style.cssText = f.originalStyle;
+    // reset the CSS properties we changes
+    f.element.style.whiteSpace = f.originalStyle.whiteSpace;
+    f.element.style.display = f.originalStyle.display;
+    f.element.style.fontSize = f.originalStyle.fontSize;
   };
 
   // add a new fitty, does not redraw said fitty
