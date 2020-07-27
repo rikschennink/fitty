@@ -1,5 +1,5 @@
 /*
- * fitty v2.3.0 - Snugly resizes text to fit its parent container
+ * fitty v2.3.1 - Snugly resizes text to fit its parent container
  * Copyright (c) 2020 Rik Schennink <rik@pqina.nl> (https://pqina.nl/)
  */
 'use strict';
@@ -152,12 +152,9 @@ exports.default = function (w) {
 
   // apply styles to single fitty
   var applyStyle = function applyStyle(f) {
-
-    // remember original style, we need this to restore the fitty style when unsubscribing
-    if (!f.originalStyle) f.originalStyle = f.element.getAttribute('style') || '';
-
-    // set the new style to the original style plus the fitty styles
-    f.element.style.cssText = f.originalStyle + ';white-space:' + f.whiteSpace + ';display:' + f.display + ';font-size:' + f.currentFontSize + 'px';
+    f.element.style.whiteSpace = f.whiteSpace;
+    f.element.style.display = f.display;
+    f.element.style.fontSize = f.currentFontSize + 'px';
   };
 
   // dispatch a fit event on a fitty
@@ -181,6 +178,13 @@ exports.default = function (w) {
   };
 
   var init = function init(f) {
+
+    // save some of the original CSS properties before we change them
+    f.originalStyle = {
+      whiteSpace: f.element.style.whiteSpace,
+      display: f.element.style.display,
+      fontSize: f.element.style.fontSize
+    };
 
     // should we observe DOM mutations
     observeMutations(f);
@@ -206,8 +210,10 @@ exports.default = function (w) {
       // stop observing DOM
       if (f.observeMutations) f.observer.disconnect();
 
-      // reset font size to inherited size
-      f.element.style.cssText = f.originalStyle;
+      // reset the CSS properties we changes
+      f.element.style.whiteSpace = f.originalStyle.whiteSpace;
+      f.element.style.display = f.originalStyle.display;
+      f.element.style.fontSize = f.originalStyle.fontSize;
     };
   };
 
