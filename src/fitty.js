@@ -139,12 +139,9 @@ export default ((w) => {
 
   // apply styles to single fitty
   const applyStyle = f => {
-
-    // remember original style, we need this to restore the fitty style when unsubscribing
-    if (!f.originalStyle) f.originalStyle = f.element.getAttribute('style') || '';
-
-    // set the new style to the original style plus the fitty styles
-    f.element.style.cssText = `${f.originalStyle};white-space:${f.whiteSpace};display:${f.display};font-size:${f.currentFontSize}px`;
+    f.element.style.whiteSpace = f.whiteSpace;
+    f.element.style.display = f.display;
+    f.element.style.fontSize = f.currentFontSize + 'px';
   };
 
 
@@ -169,6 +166,13 @@ export default ((w) => {
 
   const init = f => {
 
+    // save some of the original CSS properties before we change them
+    f.originalStyle = {
+      whiteSpace: f.element.style.whiteSpace,
+      display: f.element.style.display,
+      fontSize: f.element.style.fontSize,
+    };
+
     // should we observe DOM mutations
     observeMutations(f);
 
@@ -190,8 +194,10 @@ export default ((w) => {
     // stop observing DOM
     if (f.observeMutations) f.observer.disconnect();
 
-    // reset font size to inherited size
-    f.element.style.cssText = f.originalStyle;
+    // reset the CSS properties we changes
+    f.element.style.whiteSpace = f.originalStyle.whiteSpace;
+    f.element.style.display = f.originalStyle.display;
+    f.element.style.fontSize = f.originalStyle.fontSize;
   };
 
   // add a new fitty, does not redraw said fitty
