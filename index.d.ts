@@ -11,6 +11,7 @@ declare module 'fitty' {
   export default fitty
 
   export interface FittyInstance {
+    element: HTMLElement
     fit: () => void
     freeze: () => void
     unfreeze: () => void
