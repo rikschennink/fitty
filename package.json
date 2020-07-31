@@ -1,6 +1,6 @@
 {
   "name": "fitty",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "Snugly resizes text to fit its parent container",
   "keywords": [
     "fit",
