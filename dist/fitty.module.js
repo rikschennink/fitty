@@ -117,7 +117,7 @@ exports.default = function (w) {
     var style = w.getComputedStyle(f.element, null);
 
     // get current font size in pixels (if we already calculated it, use the calculated version)
-    f.currentFontSize = parseInt(style.getPropertyValue('font-size'), 10);
+    f.currentFontSize = parseFloat(style.getPropertyValue('font-size'));
 
     // get display type and wrap mode
     f.display = style.getPropertyValue('display');
