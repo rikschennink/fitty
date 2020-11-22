@@ -249,7 +249,8 @@ exports.default = function (w) {
   var mutationObserverDefaultSetting = {
     subtree: true,
     childList: true,
-    characterData: true
+    characterData: true,
+    attributes: true
   };
 
   // default fitty options

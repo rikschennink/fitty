@@ -231,7 +231,8 @@ export default ((w) => {
   const mutationObserverDefaultSetting = {
     subtree: true,
     childList: true,
-    characterData: true
+    characterData: true,
+    attributes: true
   };
 
 
