@@ -1,5 +1,5 @@
 /*
- * fitty v2.3.3 - Snugly resizes text to fit its parent container
+ * fitty v2.4.0 - Snugly resizes text to fit its parent container
  * Copyright (c) 2020 Rik Schennink <rik@pqina.nl> (https://pqina.nl/)
  */
 'use strict';
@@ -250,7 +250,7 @@ exports.default = function (w) {
     subtree: true,
     childList: true,
     characterData: true,
-    attributes: true
+    attributeFilter: ['class']
   };
 
   // default fitty options
