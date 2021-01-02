@@ -70,20 +70,37 @@ export default ((w) => {
     // get available width from parent node
     f.availableWidth = f.element.parentNode.clientWidth;
 
-    // the space our target element uses
+    // get available height from parent node
+    f.availableHeight = f.element.parentNode.clientHeight;
+
+    // the width our target element uses
     f.currentWidth = f.element.scrollWidth;
+
+    // the height our target element uses
+    f.currentHeight = f.element.scrollHeight;
 
     // remember current font size
     f.previousFontSize = f.currentFontSize;
 
-    // let's calculate the new font size
+    // let's calculate the new font size taking into account the width and
+    // the height
     f.currentFontSize = Math.min(
-      Math.max(
-        f.minSize,
-        (f.availableWidth / f.currentWidth) * f.previousFontSize
+      Math.min(
+        Math.max(
+          f.minSize,
+          (f.availableWidth / f.currentWidth) * f.previousFontSize
+        ),
+        f.maxSize
       ),
-      f.maxSize
+      Math.min(
+        Math.max(
+          f.minSize,
+          (f.availableHeight / f.currentHeight) * f.previousFontSize
+        ),
+        f.maxSize
+      )
     );
+
 
     // if allows wrapping, only wrap when at minimum font size (otherwise would break container)
     f.whiteSpace = f.multiLine && f.currentFontSize === f.minSize
@@ -93,7 +110,7 @@ export default ((w) => {
   };
 
   // should always redraw if is not dirty layout, if is dirty layout, only redraw if size has changed
-  const shouldRedraw = f => f.dirty !== DrawState.DIRTY_LAYOUT || (f.dirty === DrawState.DIRTY_LAYOUT && f.element.parentNode.clientWidth !== f.availableWidth);
+  const shouldRedraw = f => f.dirty !== DrawState.DIRTY_LAYOUT || (f.dirty === DrawState.DIRTY_LAYOUT && (f.element.parentNode.clientWidth !== f.availableWidth || f.element.parentNode.clientHeight !== f.availableHeight));
 
   // every fitty element is tested for invalid styles
   const computeStyle = f => {
