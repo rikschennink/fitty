@@ -107,6 +107,8 @@ export default ((w) => {
     // get display type and wrap mode
     f.display = style.getPropertyValue('display');
     f.whiteSpace = style.getPropertyValue('white-space');
+
+    return true
   };
 
 
