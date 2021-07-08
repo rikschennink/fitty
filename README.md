@@ -96,7 +96,7 @@ var myFittyElement = fitties[0].element;
 fitties[0].fit();
 
 // stop updating this fitty and restore to original state
-fitties[0].destroy();
+fitties[0].unsubscribe();
 ```
 
 Fitty dispatches an event named `"fit"` when a fitty is fitted.
