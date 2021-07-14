@@ -1,0 +1,88 @@
+<svg fill="none" viewBox="0 0 500 250" width="500" height="250" xmlns="http://www.w3.org/2000/svg">
+	<foreignObject width="100%" height="100%">
+		<div xmlns="http://www.w3.org/1999/xhtml">
+            <style>
+                .html {
+                    box-sizing: border-box;
+                    padding: 1.25rem 1rem 0 1.25rem;
+					font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+
+                    border: 1px solid;
+                    /*border-radius: .5rem;*/
+                    display: flex;
+                    flex-direction: row-reverse;
+                    font-size: .875rem;
+                    line-height: 1.4;
+                    width: 500px;
+                    height: 250px;
+
+                    /* day colors */
+                    background-color: #fff;
+                    border-color: #e1e4e8;
+                    color: #24292e;
+                    
+                }
+
+                .html strong {
+                    color:#000;
+                }
+
+                .html h2,
+                .html p {
+                    margin: 0;
+                }
+
+                .html h2 {
+                    font-weight: 600;
+                    font-size: 1rem;
+                    margin-top: -.075rem;
+                }
+
+                .html img {
+                    border-radius: .75rem;
+                    margin-right: 1.25rem;
+                }
+
+                .html h2 + p,
+                .html p + p {
+                    margin-top: .875rem;
+                }
+
+                .html small {
+                    opacity: .5;
+                    display: inline-block;
+                    max-width: 16rem;
+                }
+
+                @media (prefers-color-scheme: dark) {
+                    .html   {
+                        background-color: rgb(13, 17, 23);
+                        border-color: rgb(48, 54, 61);
+                        color: rgb(201, 209, 217);
+                    }
+
+                    .html strong {
+                        color:#fff;
+                        white-space: nowrap;
+                    }
+                }
+            </style>
+			<div class="html">
+				
+                <div>
+                    <h2>Hi! It's me Rik! 👋</h2>
+                    
+                    <p>I'm the dev behind Fitty.</p> 
+                    
+                    <p>Love Fitty? <strong>Buy me a Coffee ☕️</strong> to support Fitties development.</p>
+                    
+                    <p>Thanks! 🙏</p>
+
+                    <p><small>PS. I love a good cup of coffee but donations are secretly spent on LEGOs for my kids.</small></p>
+                </div>
+
+                <img width="64" height="64" src="data:image/jpeg;base64,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" alt=""/>
+			</div>
+		</div>
+	</foreignObject>
+</svg>
