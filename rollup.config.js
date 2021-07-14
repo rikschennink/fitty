@@ -23,13 +23,14 @@ const config = {
         {
             format: 'esm',
             sourcemap: false,
+            plugins: isProduction ? [terser()] : [],
             file: 'dist/fitty.module.js',
         },
         {
             sourcemap: false,
             format: 'umd',
             name: 'fitty',
-            plugins: [terser()],
+            plugins: isProduction ? [terser()] : [],
             file: 'dist/fitty.min.js',
         },
     ],
