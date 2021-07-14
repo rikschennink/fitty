@@ -12,7 +12,7 @@ Ideal for flexible and responsive websites.
 
 ---
 
-[<img src="https://github.com/rikschennink/fitty/blob/master/header.svg" alt=""/>](https://www.buymeacoffee.com/rikschennink/)
+[<img src="https://github.com/rikschennink/fitty/blob/gh-pages/header.svg" alt=""/>](https://www.buymeacoffee.com/rikschennink/)
 
 [Buy me a Coffee](https://www.buymeacoffee.com/rikschennink/) / [Dev updates on Twitter](https://twitter.com/rikschennink/)
 
