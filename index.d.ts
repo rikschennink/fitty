@@ -1,5 +1,5 @@
 declare module 'fitty' {
-  interface FittyOptions {
+  export interface FittyOptions {
     minSize?: number
     maxSize?: number
     multiLine?: boolean
