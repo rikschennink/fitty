@@ -11,6 +11,7 @@
         "resize"
     ],
     "main": "dist/fitty.module.js",
+    "types": "index.d.ts",
     "author": "Rik Schennink <rik@pqina.nl> (https://pqina.nl/)",
     "license": "MIT",
     "devDependencies": {
