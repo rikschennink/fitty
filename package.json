@@ -10,7 +10,7 @@
         "rescale",
         "resize"
     ],
-    "main": "dist/fitty.module.js",
+    "main": "dist/fitty.min.js",
     "types": "index.d.ts",
     "author": "Rik Schennink <rik@pqina.nl> (https://pqina.nl/)",
     "license": "MIT",
