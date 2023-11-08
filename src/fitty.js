@@ -304,6 +304,21 @@ export default ((w) => {
     fitty.observeWindow = true;
     fitty.observeWindowDelay = 100;
 
+    const onBeforePrint = () => {
+        fitties.forEach((f) => (f.dirty = DrawState.DIRTY_LAYOUT));
+        redraw(fitties.filter((f) => f.dirty && f.active))
+    };
+
+    // define observe print property, so when we set it to true or false events are automatically added and removed
+    Object.defineProperty(fitty, 'observePrint', {
+        set: (enabled) => {
+            const method = `${enabled ? 'add' : 'remove'}EventListener`;
+            w[method]('beforeprint', onBeforePrint);
+        },
+    });
+
+    fitty.observePrint = false;
+
     // public fit all method, will force redraw no matter what
     fitty.fitAll = redrawAll(DrawState.DIRTY);
 

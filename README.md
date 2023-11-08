@@ -127,6 +127,7 @@ The `fitty` function itself also exposes some static options and methods:
 | -------------------------- | ------- | --------------------------------------------------------------------------------------------------------- |
 | `fitty.observeWindow`      | `true`  | Listen to the "resize" and "orientationchange" event on the window object and update fitties accordingly. |
 | `fitty.observeWindowDelay` | `100`   | Redraw debounce delay in milliseconds for when above events are triggered.                                |
+| `fitty.observePrint`       | `false` | Listen to the "beforeprint" event on the window object and update fitties accordingly. |
 
 | Method           | Description                                                                                               |
 | ---------------- | --------------------------------------------------------------------------------------------------------- |
