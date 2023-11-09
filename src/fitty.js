@@ -20,18 +20,23 @@ export default ((w) => {
     let redrawFrame = null;
     const requestRedraw =
         'requestAnimationFrame' in w
-            ? () => {
+            ? (options = { sync: false }) => {
                   w.cancelAnimationFrame(redrawFrame);
-                  redrawFrame = w.requestAnimationFrame(() =>
-                      redraw(fitties.filter((f) => f.dirty && f.active))
-                  );
+
+                  if (options.sync) {
+                    redraw(fitties.filter((f) => f.dirty && f.active))
+                  } else {
+                    redrawFrame = w.requestAnimationFrame(() =>
+                        redraw(fitties.filter((f) => f.dirty && f.active))
+                    );
+                  }
               }
             : () => {};
 
     // sets all fitties to dirty so they are redrawn on the next redraw loop, then calls redraw
-    const redrawAll = (type) => () => {
+    const redrawAll = (type) => (options) => {
         fitties.forEach((f) => (f.dirty = type));
-        requestRedraw();
+        requestRedraw(options);
     };
 
     // redraws fitties so they nicely fit their parent container
@@ -154,10 +159,10 @@ export default ((w) => {
     };
 
     // fit method, marks the fitty as dirty and requests a redraw (this will also redraw any other fitty marked as dirty)
-    const fit = (f, type) => () => {
+    const fit = (f, type) => (options) => {
         f.dirty = type;
         if (!f.active) return;
-        requestRedraw();
+        requestRedraw(options);
     };
 
     const init = (f) => {
