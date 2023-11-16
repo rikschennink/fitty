@@ -84,7 +84,7 @@ The `fitty` function returns a single or multiple Fitty instances depending on h
 
 | Method          | Description                                                                        |
 | --------------- | ---------------------------------------------------------------------------------- |
-| `fit()`         | Force a redraw of the current fitty element                                        |
+| `fit(options)`  | Force a redraw of the current fitty element                                        |
 | `freeze()`      | No longer update this fitty on changes                                             |
 | `unfreeze()`    | Resume updates to this fitty                                                       |
 | `unsubscribe()` | Remove the fitty element from the redraw loop and restore it to its original state |
@@ -101,6 +101,9 @@ var myFittyElement = fitties[0].element;
 
 // force refit
 fitties[0].fit();
+
+// force synchronous refit
+fitties[0].fit({ sync: true });
 
 // stop updating this fitty and restore to original state
 fitties[0].unsubscribe();
@@ -128,9 +131,9 @@ The `fitty` function itself also exposes some static options and methods:
 | `fitty.observeWindow`      | `true`  | Listen to the "resize" and "orientationchange" event on the window object and update fitties accordingly. |
 | `fitty.observeWindowDelay` | `100`   | Redraw debounce delay in milliseconds for when above events are triggered.                                |
 
-| Method           | Description                                                                                               |
-| ---------------- | --------------------------------------------------------------------------------------------------------- |
-| `fitty.fitAll()` | Refits all fitty instances to match their parent containers. Essentially a request to redraw all fitties. |
+| Method                  | Description                                                                                                                                                                |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fitty.fitAll(options)` | Refits all fitty instances to match their parent containers. Essentially a request to redraw all fitties. The `options` object is passed to fitty instance `fit()` method. |
 
 ## Performance
 

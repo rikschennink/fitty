@@ -23,13 +23,11 @@ export default ((w) => {
             ? (options = { sync: false }) => {
                   w.cancelAnimationFrame(redrawFrame);
 
-                  if (options.sync) {
-                    redraw(fitties.filter((f) => f.dirty && f.active))
-                  } else {
-                    redrawFrame = w.requestAnimationFrame(() =>
-                        redraw(fitties.filter((f) => f.dirty && f.active))
-                    );
-                  }
+                  const redrawFn = () => redraw(fitties.filter((f) => f.dirty && f.active));
+
+                  if (options.sync) return redrawFn();
+
+                  redrawFrame = w.requestAnimationFrame(redrawFn);
               }
             : () => {};
 
