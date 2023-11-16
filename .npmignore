@@ -6,3 +6,4 @@ src/
 gulpfile.babel.js
 npm-debug.log
 *.html
+.npmrc
