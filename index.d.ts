@@ -10,9 +10,13 @@ declare module 'fitty' {
   function fitty (el: string, options?: FittyOptions): FittyInstance[]
   export default fitty
 
+  export interface RedrawOptions {
+    sync?: boolean
+  }
+
   export interface FittyInstance {
     element: HTMLElement
-    fit: () => void
+    fit: (redrawOptions?: RedrawOptions) => void
     freeze: () => void
     unfreeze: () => void
     unsubscribe: () => void
