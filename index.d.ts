@@ -24,7 +24,7 @@ declare module 'fitty' {
     declare namespace fitty {
         let observeWindow: boolean;
         let observeWindowDelay: number;
-        let fitAll: (options?: FittyOptions) => void;
+        const fitAll: (options?: FittyOptions) => void;
     }
 
     export default fitty;
