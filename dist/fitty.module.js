@@ -1,5 +1,5 @@
 /**
- * fitty v2.4.0 - Snugly resizes text to fit its parent container
+ * fitty v2.4.2 - Snugly resizes text to fit its parent container
  * Copyright (c) 2023 Rik Schennink <rik@pqina.nl> (https://pqina.nl/)
  */
 
