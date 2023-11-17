@@ -6,10 +6,6 @@ declare module 'fitty' {
         observeMutations?: MutationObserverInit;
     }
 
-    function fitty(el: HTMLElement, options?: FittyOptions): FittyInstance;
-    function fitty(el: string, options?: FittyOptions): FittyInstance[];
-    export default fitty;
-
     export interface FitOptions {
         sync?: boolean;
     }
@@ -21,4 +17,15 @@ declare module 'fitty' {
         unfreeze: () => void;
         unsubscribe: () => void;
     }
+
+    function fitty(el: HTMLElement, options?: FittyOptions): FittyInstance;
+    function fitty(el: string, options?: FittyOptions): FittyInstance[];
+
+    declare namespace fitty {
+        let observeWindow: boolean;
+        let observeWindowDelay: number;
+        let fitAll: (options?: FittyOptions) => void;
+    }
+
+    export default fitty;
 }
