@@ -13,17 +13,21 @@ export default ((w) => {
         DIRTY: 3,
     };
 
-    // all active fitty elements
-    let fitties = [];
+    // all active fitty elements now using WeakSet
+    let fitties = new WeakSet();
 
-    // group all redraw calls till next frame, we cancel each frame request when a new one comes in. If no support for request animation frame, this is an empty function and supports for fitty stops.
+    // group all redraw calls till next frame
     let redrawFrame = null;
     const requestRedraw =
         'requestAnimationFrame' in w
             ? (options = { sync: false }) => {
                   w.cancelAnimationFrame(redrawFrame);
 
-                  const redrawFn = () => redraw(fitties.filter((f) => f.dirty && f.active));
+                  const redrawFn = () => {
+                      // Convert WeakSet to Array for filtering
+                      const fittiesArray = Array.from(fitties).filter((f) => f.dirty && f.active);
+                      redraw(fittiesArray);
+                  };
 
                   if (options.sync) return redrawFn();
 
@@ -31,41 +35,41 @@ export default ((w) => {
               }
             : () => {};
 
-    // sets all fitties to dirty so they are redrawn on the next redraw loop, then calls redraw
+    // sets all fitties to dirty so they are redrawn on the next redraw loop
     const redrawAll = (type) => (options) => {
-        fitties.forEach((f) => (f.dirty = type));
+        Array.from(fitties).forEach((f) => (f.dirty = type));
         requestRedraw(options);
     };
 
     // redraws fitties so they nicely fit their parent container
-    const redraw = (fitties) => {
+    const redraw = (fittiesArray) => {
         // getting info from the DOM at this point should not trigger a reflow, let's gather as much intel as possible before triggering a reflow
-
+    
         // check if styles of all fitties have been computed
-        fitties
+        fittiesArray
             .filter((f) => !f.styleComputed)
             .forEach((f) => {
                 f.styleComputed = computeStyle(f);
             });
-
+    
         // restyle elements that require pre-styling, this triggers a reflow, please try to prevent by adding CSS rules (see docs)
-        fitties.filter(shouldPreStyle).forEach(applyStyle);
-
+        fittiesArray.filter(shouldPreStyle).forEach(applyStyle);
+    
         // we now determine which fitties should be redrawn
-        const fittiesToRedraw = fitties.filter(shouldRedraw);
-
+        const fittiesToRedraw = fittiesArray.filter(shouldRedraw);
+    
         // we calculate final styles for these fitties
         fittiesToRedraw.forEach(calculateStyles);
-
+    
         // now we apply the calculated styles from our previous loop
         fittiesToRedraw.forEach((f) => {
             applyStyle(f);
             markAsClean(f);
         });
-
+    
         // now we dispatch events for all restyled fitties
         fittiesToRedraw.forEach(dispatchFitEvent);
-    };
+    };    
 
     const markAsClean = (f) => (f.dirty = DrawState.IDLE);
 
@@ -181,12 +185,12 @@ export default ((w) => {
         f.dirty = true;
 
         // we want to be able to update this fitty
-        fitties.push(f);
+        fitties.add(f);
     };
 
     const destroy = (f) => () => {
         // remove from fitties array
-        fitties = fitties.filter((_) => _.element !== f.element);
+        fitties.delete(f);
 
         // stop observing DOM
         if (f.observeMutations) f.observer.disconnect();
@@ -201,11 +205,15 @@ export default ((w) => {
     const subscribe = (f) => () => {
         if (f.active) return;
         f.active = true;
+        fitties.add(f); // Add to WeakSet
         requestRedraw();
     };
 
     // remove an existing fitty
-    const unsubscribe = (f) => () => (f.active = false);
+    const unsubscribe = (f) => () => {
+        f.active = false;
+        fitties.delete(f); // Remove from WeakSet
+    };
 
     const observeMutations = (f) => {
         // no observing?
